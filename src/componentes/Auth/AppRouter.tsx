@@ -15,6 +15,7 @@ import { UsuarioEditar } from "../Paginas/Administrador/UsuarioEditar";
 import { UsuariosAccesos } from "../Paginas/Administrador/UsuariosAccesos";
 import { Deportes } from "../Paginas/Administrador/Deportes";
 import { Prueba } from "../Paginas/Prueba";
+import { Torneos } from "../Paginas/Torneos";
 
 export function AppRouter() {
     function Layout() {
@@ -135,8 +136,8 @@ export function AppRouter() {
                             <Route
                                 path="torneos"
                                 element={
-                                    <PrivateRoute requiredRole={[1]}>
-                                        <Prueba />
+                                    <PrivateRoute requiredRole={[1, 2]}>
+                                        <Torneos url={`http://localhost:5170/api/Torneo/All`} />
                                     </PrivateRoute>
                                 }
                             />
