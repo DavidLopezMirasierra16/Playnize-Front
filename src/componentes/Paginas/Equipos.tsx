@@ -1,80 +1,57 @@
 import { useEffect, useState } from "react";
-import { useAuth } from "../Auth/AuthContext";
-import { useFetch } from "../Hooks_Personalizados/UseFetch";
 import type { Url } from "./Administrador/Deportes";
+import { useFetch } from "../Hooks_Personalizados/UseFetch";
+import { useAuth } from "../Auth/AuthContext";
 import { useNavigate } from "react-router-dom";
-import { Activo, Finalizado, NoEmpezado } from "./Estados";
 
-export function Torneos({ url }: Url) {
+export function Equipos({ url }: Url) {
 
-    interface Deporte {
-        $id: string,
-        deporte: string
-    }
-
-    interface Organizador {
-        $id: string,
-        id: number,
-        email: string
-    }
-
-    interface Torneo {
+    interface Equipo {
         $id: string,
         id: number,
         nombre: string,
-        premio: string,
-        fechaInicio: string,
-        fechaFin: string,
-        localizacion: string,
-        deporte: Deporte,
-        organizador: Organizador
+        activo: boolean,
+        participantes: number,
+        torneos: number
     }
 
     interface Busqueda {
+        integrante: string,
         nombre: string,
-        premio: string,
-        fechaInicio: string,
-        fechaFin: string,
-        localizacion: string,
-        deporte: string,
+        torneos: string,
+        activo: string
     }
 
     const { token, rol } = useAuth();
     const { data, loading, error, fetchData } = useFetch();
     const [pagina, setPagina] = useState<number>(1);
     const [visible, setVisible] = useState<boolean>(false);
-    const navegate = useNavigate();
+    const navigate = useNavigate();
     const [buscar, setBuscar] = useState<Busqueda>({
+        integrante: '',
         nombre: '',
-        premio: '',
-        fechaInicio: '',
-        fechaFin: '',
-        localizacion: '',
-        deporte: ''
+        torneos: '',
+        activo: ''
     });
 
     const [filtro, setFiltros] = useState<Busqueda>({
+        integrante: '',
         nombre: '',
-        premio: '',
-        fechaInicio: '',
-        fechaFin: '',
-        localizacion: '',
-        deporte: ''
+        torneos: '',
+        activo: ''
     });
 
     useEffect(() => {
         const params = new URLSearchParams();
         params.append('page', pagina.toString());
 
+        if (buscar.integrante) params.append('integrante', buscar.integrante.toString());
         if (buscar.nombre?.trim()) params.append('nombre', buscar.nombre.trim());
-        if (buscar.premio) params.append('premio', buscar.premio.toString());
-        if (buscar.fechaInicio) params.append('fecha_ini', buscar.fechaInicio.trim());
-        if (buscar.fechaFin) params.append('fecha_fin', buscar.fechaFin.toString());
-        if (buscar.deporte?.trim()) params.append('deporte', buscar.deporte.trim());
-        if (buscar.localizacion?.trim()) params.append('localizacion', buscar.localizacion.trim());
+        if (buscar.torneos) params.append('torneos', buscar.torneos.toString());
+        if (buscar.activo) params.append('activo', buscar.activo.toString());
 
-        fetchData(url + `?${params.toString()}`, 'get', {}, token);
-    }, [url, pagina, buscar]);
+        fetchData(url + `?${params}`, 'get', {}, token);
+    }, [url, buscar, pagina]);
 
     const handleVisible = () => {
         setVisible(!visible);
@@ -82,7 +59,7 @@ export function Torneos({ url }: Url) {
 
     const handleChangeFiltro = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
-        setFiltros(prev => ({ ...prev, [name]: value })) //A los filtros que ya hay, le añade lo nuevo que escribamos
+        setFiltros(prev => ({ ...prev, [name]: value }));
     }
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -100,12 +77,10 @@ export function Torneos({ url }: Url) {
 
     const handleLimpiar = () => {
         const filtroLimpio = {
+            integrante: '',
             nombre: '',
-            premio: '',
-            fechaInicio: '',
-            fechaFin: '',
-            localizacion: '',
-            deporte: ''
+            torneos: '',
+            activo: ''
         }
 
         setFiltros(filtroLimpio);
@@ -114,7 +89,7 @@ export function Torneos({ url }: Url) {
     }
 
     const handleRedirect = (id: number) => {
-        navegate(`/panel/torneos/${id}`)
+        navigate(`/panel/equipos/${id}`);
     }
 
     return (
@@ -135,7 +110,7 @@ export function Torneos({ url }: Url) {
             {data && (
                 <div>
                     <div className="bg-white p-3 rounded-md shadow-sm mb-4">
-                        <p className="mb-4 font-bold text-lg">{rol == 1 ? "Torneos" : "Tus torneos"}</p>
+                        <p className="mb-4 font-bold text-lg">{rol == 1 ? "Equipos" : "Tus equipos"}</p>
 
                         {/* Botón de mostrar filtros */}
                         <div className={`mb-4`}>
@@ -151,29 +126,24 @@ export function Torneos({ url }: Url) {
                         <form onSubmit={handleSubmit}>
                             <div className={`mb-4 grid grid-cols-1 gap-2 text-center sm:text-start sm:grid-cols-2 sm:gap-0 md:grid-cols-3 xl:grid-cols-5 bg-white p-3 rounded-md shadow-sm max-w-6xl ${visible ? 'block' : 'hidden'}`}>
                                 <div>
-                                    <p className="text-sm text-gray-500">Torneo</p>
+                                    <p className="text-sm text-gray-500">Nombre</p>
                                     <input type="text" name="nombre" id="nombre" value={filtro.nombre} onChange={handleChangeFiltro} className="border border-[#868686] rounded-sm" />
                                 </div>
                                 <div>
-                                    <p className="text-sm text-gray-500">Premio</p>
-                                    <input type="range" min="0" max="100000" step="1000" name="premio" id="premio" value={filtro.premio} onChange={handleChangeFiltro} className="border border-[#868686] rounded-sm" />
-                                    <span className="text-sm text-gray-700">{filtro.premio}€</span>
-                                </div>
-                                {/* <div>
-                                    <p className="text-sm text-gray-500">Fecha de inicio</p>
-                                    <input type="date" name="fechaInicio" id="fechaInicio" value={filtro.fechaInicio} onChange={handleChangeFiltro} className="border border-[#868686] rounded-sm" />
+                                    <p className="text-sm text-gray-500">Nº de integrantes</p>
+                                    <input type="number" min="0" name="integrante" id="integrante" value={filtro.integrante} onChange={handleChangeFiltro} className="border border-[#868686] rounded-sm" />
                                 </div>
                                 <div>
-                                    <p className="text-sm text-gray-500">Fecha de fin</p>
-                                    <input type="date" name="fechaFin" id="fechaFin" value={filtro.fechaFin} onChange={handleChangeFiltro} className="border border-[#868686] rounded-sm" />
-                                </div> */}
-                                <div>
-                                    <p className="text-sm text-gray-500">Deporte</p>
-                                    <input type="text" name="deporte" id="deporte" value={filtro.deporte} onChange={handleChangeFiltro} className="border border-[#868686] rounded-sm" />
+                                    <p className="text-sm text-gray-500">Nº de torneos</p>
+                                    <input type="number" min="0" name="torneos" id="torneos" value={filtro.torneos} onChange={handleChangeFiltro} className="border border-[#868686] rounded-sm" />
                                 </div>
                                 <div>
-                                    <p className="text-sm text-gray-500">Localización</p>
-                                    <input type="text" name="localizacion" id="localizacion" value={filtro.localizacion} onChange={handleChangeFiltro} className="border border-[#868686] rounded-sm" />
+                                    <p className="text-sm text-gray-500">Equipo</p>
+                                    <select name="activo" id="activo" value={filtro.activo} className="border border-[#868686] rounded-sm" onChange={handleChangeFiltro}>
+                                        <option value="0">Seleccione una opción</option>
+                                        <option value="true">Activo</option>
+                                        <option value="false">No activo</option>
+                                    </select>
                                 </div>
                                 <div className="mt-3 flex gap-2 items-end w-4/4">
                                     <button type="submit" className="w-12/12 cursor-pointer bg-[#1E2939] p-1 rounded-sm text-white hover:bg-[#374151]">
@@ -189,47 +159,27 @@ export function Torneos({ url }: Url) {
                         {/* Tabla */}
                         <div>
                             {data.datos.$values != 0 ? (
-                                data.datos.$values.map((t: Torneo, i: number) => {
+                                data.datos.$values.map((e: Equipo, i: number) => {
                                     return (
-                                        <div key={t.$id} className={`mb-5 items-center lg:gap-4 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-7 ${i === data.datos.$values.length - 1 ? '' : ' border-b-2 border-b-[#F3F4F6]'}`}>
+                                        <div key={e.$id} className={`mb-5 items-center grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 ${i === data.datos.$values.length - 1 ? '' : ' border-b-2 border-b-[#F3F4F6]'}`}>
                                             <div>
-                                                <p className="text-sm text-gray-500">Torneo</p>
-                                                <p className="text-base font-medium text-gray-800 break-words">{t.nombre}</p>
+                                                <p className="text-sm text-gray-500">Equipo</p>
+                                                <p className="text-base font-medium text-gray-800 break-words">{e.nombre}</p>
                                             </div>
                                             <div className="mt-2 lg:mt-0">
-                                                <p className="text-sm text-gray-500">Localización</p>
-                                                <p className="text-base font-medium text-gray-800 break-words">{t.localizacion}</p>
+                                                <p className="text-sm text-gray-500">Nº de integrantes</p>
+                                                <p className="text-base font-medium text-gray-800 break-words">{e.participantes}</p>
                                             </div>
                                             <div>
-                                                <p className="text-sm text-gray-500">Fecha</p>
-                                                <p className="text-base font-medium text-gray-800 break-words">{t.fechaInicio} - {t.fechaFin}</p>
-                                            </div>
-                                            <div className="mt-2 md:mt-0">
-                                                <p className="text-sm text-gray-500">Premio</p>
-                                                <p className="text-base font-medium text-gray-800 break-words">{t.premio}</p>
-                                            </div>
-                                            <div className="mt-2 lg:mt-0">
-                                                <p className="text-sm text-gray-500">Organizador</p>
-                                                <a href={`mailto:${t.organizador.email}`} className="text-base font-medium text-gray-800 break-words">{t.organizador.email}</a>
+                                                <p className="text-sm text-gray-500">Nº de torneos</p>
+                                                <p className="text-base font-medium text-gray-800 break-words">{e.torneos}</p>
                                             </div>
                                             <div className="mt-2 lg:mt-0">
                                                 <p className="text-sm text-gray-500">Estado</p>
-                                                {(() => {
-                                                    const hoy = new Date();
-                                                    const inicio = new Date(t.fechaInicio);
-                                                    const fin = new Date(t.fechaFin);
-
-                                                    if (hoy < inicio) {
-                                                        return <NoEmpezado />;
-                                                    } else if (hoy >= inicio && hoy <= fin) {
-                                                        return <Activo />;
-                                                    } else {
-                                                        return <Finalizado />;
-                                                    }
-                                                })()}
+                                                <p className="text-base font-medium text-gray-800 break-words">{e.activo == true ? "Activo" : "No activo"}</p>
                                             </div>
-                                            <div className="mt-2 lg:mt-0 lg:text-center">
-                                                <button title="Detalles del torneo" onClick={() => handleRedirect(t.id)} className=" cursor-pointer bg-blue-500 hover:bg-blue-600 p-1 rounded-sm text-white">
+                                            <div className="mt-2 lg:mt-0">
+                                                <button title="Detalles del equipo" onClick={() => handleRedirect(e.id)} className=" cursor-pointer bg-blue-500 hover:bg-blue-600 p-1 rounded-sm text-white">
                                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-5">
                                                         <path strokeLinecap="round" strokeLinejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" />
                                                     </svg>
@@ -238,7 +188,7 @@ export function Torneos({ url }: Url) {
                                         </div>
                                     )
                                 })
-                            ) : <p>No hay ningún torneo registrado</p>}
+                            ) : <p>No hay ningún equipo registrado</p>}
                         </div>
                         {data.totalPages > 1 && (
                             <div className="flex flex-wrap items-center">

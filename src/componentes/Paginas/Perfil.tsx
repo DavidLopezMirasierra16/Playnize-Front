@@ -20,6 +20,15 @@ interface Torneo {
     }
 }
 
+interface EquipoData {
+    $id: string,
+    id: number,
+    nombre: string,
+    activo: boolean,
+    participantes: number,
+    torneos: number
+}
+
 export function Perfil() {
     const { data, loading, error, fetchData } = useFetch();
     const { token, rol } = useAuth();
@@ -28,7 +37,11 @@ export function Perfil() {
         fetchData(`http://localhost:5170/api/Usuario/Info`, 'get', {}, token)
     }, []);
 
-    const InfoTorneo = ({ id }: {id: number}) => {
+    useEffect(() => {
+        console.log(data)
+    }, [data])
+
+    const InfoTorneo = ({ id }: { id: number }) => {
         const navigate = useNavigate();
 
         const handleInfo = () => {
@@ -87,7 +100,8 @@ export function Perfil() {
                             </div>
                         </div>
                     </div>
-                    <div className="bg-white p-3 rounded-md shadow-sm">
+
+                    <div className="bg-white p-3 rounded-md shadow-sm mb-4">
                         {rol === 3 ? <p className="mb-4 font-bold text-lg">Torneos dónde participas</p> : <p className="mb-4 font-bold text-lg">Tus torneos</p>}
                         {
                             data.user.torneos.$values.length != 0 ? (
@@ -146,6 +160,36 @@ export function Perfil() {
                             ) : <p>No estás registrado/a en ningún torneo</p>
                         }
                     </div>
+
+                    <div className="bg-white p-3 rounded-md shadow-sm">
+                        {rol === 3 ? <p className="mb-4 font-bold text-lg">Equipos dónde participas</p> : <p className="mb-4 font-bold text-lg">Tus equipos</p>}
+
+                        {data.user.equipos.$values.length != 0 ? (
+                            data.user.equipos.$values.map((e: EquipoData, i: number) => {
+                                return (
+                                    <div key={e.$id} className={`mb-5 items-center grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 ${i === data.user.equipos.$values.length - 1 ? '' : ' border-b-2 border-b-[#F3F4F6]'}`}>
+                                        <div>
+                                            <p className="text-sm text-gray-500">Equipo</p>
+                                            <p className="text-base font-medium text-gray-800 break-words">{e.nombre}</p>
+                                        </div>
+                                        <div>
+                                            <p className="text-sm text-gray-500">Nº de integrantes</p>
+                                            <p className="text-base font-medium text-gray-800 break-words">{e.participantes}</p>
+                                        </div>
+                                        <div>
+                                            <p className="text-sm text-gray-500 mt-3 lg:mt-0">Nº de torneos</p>
+                                            <p className="text-base font-medium text-gray-800 break-words">{e.torneos}</p>
+                                        </div>
+                                        <div className="mt-3 lg:mt-0">
+                                            <p className="text-sm text-gray-500">Estado</p>
+                                            <p className="text-base font-medium text-gray-800 break-words">{e.activo == true ? "Activo" : "No activo"}</p>
+                                        </div>
+                                    </div>
+                                )
+                            })
+                        ) : <p>No tienes ningún equipo registrado</p>}
+                    </div>
+
                 </div>
             )}
         </>
