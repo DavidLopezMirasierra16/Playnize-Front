@@ -1,8 +1,23 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useAuth } from "../../Auth/AuthContext";
 import { useFetch } from "../../Hooks_Personalizados/UseFetch";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Activo, Finalizado, NoEmpezado } from "../Estados";
+import { EditarUser } from "../../Componentes_Personalizados/FormEditarUser";
+
+export interface EditarDatos {
+    datos: FormEditar,
+    visible: () => void,
+    id: number,
+    mensaje: (msg: string) => void
+}
+
+export interface FormEditar {
+    Nombre: string,
+    Apellidos: string,
+    Email: string,
+    Telefono: string
+}
 
 export function UsuarioDetalle() {
 
@@ -18,13 +33,38 @@ export function UsuarioDetalle() {
     const { data, loading, error, fetchData } = useFetch();
     const navigate = useNavigate();
     let rol;
+    const [visible, setVisible] = useState<boolean>(false);
+    const [mensaje, setMensaje] = useState<string | null>();
+    const [formEditar, setFormEditar] = useState<FormEditar>({
+        Nombre: "",
+        Apellidos: "",
+        Email: "",
+        Telefono: ""
+    });
 
     useEffect(() => {
         fetchData(`http://localhost:5170/api/Usuario/${id}`, 'get', {}, token);
-    }, []);
+    }, [visible]);
 
-    const handleEdit = (id_user: number) => {
-        navigate(`/panel/usuarios/edit/${id_user}`);
+    useEffect(() => {
+        if (data) {
+            setFormEditar({
+                Nombre: data.user.nombre,
+                Apellidos: data.user.apellidos,
+                Email: data.user.email,
+                Telefono: data.user.telefono
+            });
+        }
+    }, [data]);
+
+    const handleVisible = () => {
+        setVisible(!visible);
+        if (!visible) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'auto';
+        }
+
     }
 
     const handleDataEquipo = (id: number) => {
@@ -34,6 +74,14 @@ export function UsuarioDetalle() {
     const handleDataTorneo = (id: number) => {
         navigate(`/panel/torneos/${id}`);
     }
+
+    useEffect(() => {
+        if (mensaje) {
+            setInterval(() => {
+                setMensaje(null);
+            }, 7000);
+        }
+    }, [mensaje])
 
     return (
         <>
@@ -49,6 +97,12 @@ export function UsuarioDetalle() {
                     <div className="w-12 h-12 border-4 border-white border-t-transparent rounded-full animate-spin"></div>
                 </div>
             ) : null}
+
+            {mensaje && (
+                <div className="bg-gradient-to-l from-lime-500 via-green-500 to-emerald-500 rounded-md p-2 mb-4">
+                    <p className="text-white">{mensaje}</p>
+                </div>
+            )}
 
             {data && (
                 <div>
@@ -82,7 +136,7 @@ export function UsuarioDetalle() {
                                     </div>
                                 </div>
                                 <div className="mt-3 lg:mt-0 flex items-center">
-                                    <button title="Editar" onClick={() => handleEdit(data.user.id)} className=" cursor-pointer bg-[#ff9900] p-1 rounded-sm text-white hover:bg-[#ffbc58]">
+                                    <button title="Editar" onClick={handleVisible} className=" cursor-pointer bg-[#ff9900] p-1 rounded-sm text-white hover:bg-[#ffbc58]">
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-5">
                                             <path d="M21.731 2.269a2.625 2.625 0 0 0-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 0 0 0-3.712ZM19.513 8.199l-3.712-3.712-8.4 8.4a5.25 5.25 0 0 0-1.32 2.214l-.8 2.685a.75.75 0 0 0 .933.933l2.685-.8a5.25 5.25 0 0 0 2.214-1.32l8.4-8.4Z" />
                                             <path d="M5.25 5.25a3 3 0 0 0-3 3v10.5a3 3 0 0 0 3 3h10.5a3 3 0 0 0 3-3V13.5a.75.75 0 0 0-1.5 0v5.25a1.5 1.5 0 0 1-1.5 1.5H5.25a1.5 1.5 0 0 1-1.5-1.5V8.25a1.5 1.5 0 0 1 1.5-1.5h5.25a.75.75 0 0 0 0-1.5H5.25Z" />
@@ -92,6 +146,8 @@ export function UsuarioDetalle() {
                             </div>
                         </div>
                     </div>
+
+                    {visible && <EditarUser datos={formEditar} visible={handleVisible} id={data.user.id} mensaje={setMensaje} />}
 
                     {/* Sesion y rol */}
                     <div className="bg-white p-3 rounded-md shadow-sm mb-4">

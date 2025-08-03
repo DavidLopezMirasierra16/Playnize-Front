@@ -26,7 +26,7 @@ export function AsideAdmin({ onClose }: { onClose?: () => void }) {
                             Clientes
                         </Link>
                         <Link to="/panel/usuarios/empleados" onClick={onClose} className="block hover:underline" style={{ color: "white" }}>
-                            Empleados
+                            Administradores
                         </Link>
                         <Link to="/panel/usuarios/accesos" onClick={onClose} className="block hover:underline" style={{ color: "white" }}>
                             Accesos

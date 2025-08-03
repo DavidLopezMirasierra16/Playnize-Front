@@ -25,6 +25,7 @@ interface EquipoData {
     id: number,
     nombre: string,
     activo: boolean,
+    email: string,
     participantes: number,
     torneos: number
 }
@@ -37,15 +38,11 @@ export function Perfil() {
         fetchData(`http://localhost:5170/api/Usuario/Info`, 'get', {}, token)
     }, []);
 
-    useEffect(() => {
-        console.log(data)
-    }, [data])
-
-    const InfoTorneo = ({ id }: { id: number }) => {
+    const InfoTorneo = ({ id, url }: { id: number, url: string }) => {
         const navigate = useNavigate();
 
         const handleInfo = () => {
-            navigate(`/panel/torneos/${id}`);
+            navigate(url + id);
         }
 
         return (
@@ -110,7 +107,7 @@ export function Perfil() {
                                         <div key={t.id} className="mt-5">
                                             <div className="flex flex-wrap items-center mb-2">
                                                 <p className="text-lg">{t.nombre}</p>
-                                                <InfoTorneo id={t.id} />
+                                                <InfoTorneo id={t.id} url={`/panel/torneos/`} />
                                             </div>
                                             <div className="grid grid-cols-1 lg:grid-cols-2">
                                                 <div className="grid grid-cols-2">
@@ -167,22 +164,34 @@ export function Perfil() {
                         {data.user.equipos.$values.length != 0 ? (
                             data.user.equipos.$values.map((e: EquipoData, i: number) => {
                                 return (
-                                    <div key={e.$id} className={`mb-5 items-center grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 ${i === data.user.equipos.$values.length - 1 ? '' : ' border-b-2 border-b-[#F3F4F6]'}`}>
-                                        <div>
-                                            <p className="text-sm text-gray-500">Equipo</p>
-                                            <p className="text-base font-medium text-gray-800 break-words">{e.nombre}</p>
+                                    <div key={e.$id} className={`mb-5 items-center ${i === data.user.equipos.$values.length - 1 ? '' : ' border-b-2 border-b-[#F3F4F6]'}`}>
+                                        <div className="flex flex-wrap items-center mb-2">
+                                            <p className="text-lg">{e.nombre}</p>
+                                            <InfoTorneo id={e.id} url={`/panel/equipos/`} />
                                         </div>
-                                        <div>
-                                            <p className="text-sm text-gray-500">Nº de integrantes</p>
-                                            <p className="text-base font-medium text-gray-800 break-words">{e.participantes}</p>
-                                        </div>
-                                        <div>
-                                            <p className="text-sm text-gray-500 mt-3 lg:mt-0">Nº de torneos</p>
-                                            <p className="text-base font-medium text-gray-800 break-words">{e.torneos}</p>
-                                        </div>
-                                        <div className="mt-3 lg:mt-0">
-                                            <p className="text-sm text-gray-500">Estado</p>
-                                            <p className="text-base font-medium text-gray-800 break-words">{e.activo == true ? "Activo" : "No activo"}</p>
+                                        <div className="grid grid-cols-1 lg:grid-cols-2">
+                                            <div className="grid grid-cols-2">
+                                                <div className="flex flex-col gap-1">
+                                                    <p className="text-sm text-gray-500">Administrador del equipo</p>
+                                                    <p className="text-base font-medium text-gray-800 break-words">{e.email}</p>
+                                                </div>
+                                                <div className="flex flex-col gap-1">
+                                                    <p className="text-sm text-gray-500">Nº de integrantes</p>
+                                                    <p className="text-base font-medium text-gray-800 break-words">{e.participantes}</p>
+                                                </div>
+                                            </div>
+                                            <div className="grid grid-cols-2 mt-3 lg:mt-0">
+                                                <div className="flex flex-col gap-1">
+                                                    <p className="text-sm text-gray-500">Nº de torneos</p>
+                                                    <p className="text-base font-medium text-gray-800 break-words">{e.torneos}</p>
+                                                </div>
+                                                <div className="flex flex-col gap-1">
+                                                    <p className="text-sm text-gray-500">Estado</p>
+                                                    <p className="text-base font-medium text-gray-800 break-words">{e.activo == true ? "Activo" : "No activo"}</p>
+                                                </div>
+
+                                            </div>
+
                                         </div>
                                     </div>
                                 )
