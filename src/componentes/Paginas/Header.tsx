@@ -16,7 +16,7 @@ export function Header() {
     return (
         <header className="p-3 grid lg:grid-cols-[1fr_4fr] items-center ocultar-scroll fade-in">
             {/* Logo */}
-            <div className="text-center w-6/12 m-auto md:w-5/12 lg:w-9/12 lg:m-0">
+            <div className="text-center w-5/12 m-auto md:w-4/12 lg:w-9/12 lg:m-0">
                 <a href="/">
                     <img src="/imagenes/Playnize.png" alt="Playnize logo" />
                 </a>

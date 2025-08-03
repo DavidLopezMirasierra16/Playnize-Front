@@ -17,6 +17,7 @@ import { Deportes } from "../Paginas/Administrador/Deportes";
 import { Prueba } from "../Paginas/Prueba";
 import { Torneos } from "../Paginas/Torneos";
 import { Equipos } from "../Paginas/Equipos";
+import { Footer } from "../Paginas/Footer";
 
 export function AppRouter() {
     function Layout() {
@@ -26,8 +27,10 @@ export function AppRouter() {
 
         return (
             <>
+                {/* Header */}
                 {shouldShowHeader && <Header />}
 
+                {/* Contenido */}
                 <section className="fade-in">
                     <Routes>
                         <Route path="/" element={<div>Inicio</div>} />
@@ -183,6 +186,9 @@ export function AppRouter() {
                         <Route path="*" element={<NotFound />} />
                     </Routes>
                 </section>
+
+                {/* Footer */}
+                {shouldShowHeader && <Footer />}
             </>
         );
     }
