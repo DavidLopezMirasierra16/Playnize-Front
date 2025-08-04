@@ -19,6 +19,7 @@ import { Torneos } from "../Paginas/Torneos";
 import { Equipos } from "../Paginas/Equipos";
 import { Footer } from "../Paginas/Footer";
 import { LegalFooter } from "../Componentes_Personalizados/LegalFooter";
+import { Cookies } from "../Componentes_Personalizados/Cookies";
 
 export function AppRouter() {
     function Layout() {
@@ -198,6 +199,7 @@ export function AppRouter() {
 
                 {/* Footer */}
                 {shouldShowHeader && <Footer />}
+                <Cookies />
             </div>
         );
     }
