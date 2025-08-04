@@ -18,6 +18,7 @@ import { Prueba } from "../Paginas/Prueba";
 import { Torneos } from "../Paginas/Torneos";
 import { Equipos } from "../Paginas/Equipos";
 import { Footer } from "../Paginas/Footer";
+import { LegalFooter } from "../Componentes_Personalizados/LegalFooter";
 
 export function AppRouter() {
     function Layout() {
@@ -26,13 +27,15 @@ export function AppRouter() {
         const shouldShowHeader = !(location.pathname.startsWith("/panel") || hideHeaderOn.includes(location.pathname));
 
         return (
-            <>
+            <div className="flex flex-col min-h-screen">
                 {/* Header */}
                 {shouldShowHeader && <Header />}
 
                 {/* Contenido */}
-                <section className="fade-in">
+                <section className="fade-in flex-grow">
                     <Routes>
+
+                        {/* Rutas Header */}
                         <Route path="/" element={<div>Inicio</div>} />
                         <Route path="/historia" element={<div>Historia</div>} />
                         <Route path="/login" element={<Login />} />
@@ -184,12 +187,18 @@ export function AppRouter() {
                         </Route>
 
                         <Route path="*" element={<NotFound />} />
+
+                        {/* Rutas Footer */}
+                        <Route path="/privacidad" element={<LegalFooter opcion="privacidad" />} />
+                        <Route path="/terminos" element={<LegalFooter opcion="terminos" />} />
+                        <Route path="/cookies" element={<LegalFooter opcion="cookies" />} />
+
                     </Routes>
                 </section>
 
                 {/* Footer */}
                 {shouldShowHeader && <Footer />}
-            </>
+            </div>
         );
     }
 

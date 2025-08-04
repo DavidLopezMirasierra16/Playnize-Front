@@ -24,7 +24,7 @@ export function Header() {
 
             {/* Navegación */}
             <div className="sm:mt-3">
-                <nav className="grid grid-cols-1 text-center sm:m-auto sm:gap-3 lg:flex lg:justify-end lg:gap-4 lg:items-center">
+                <nav className="grid grid-cols-1 text-center sm:m-auto gap-2 sm:gap-3 lg:flex lg:justify-end lg:gap-4 lg:items-center">
                     <Link to="/" className={`hover:underline ${activo("/") ? "negrita" : ""}`}>Home</Link>
                     <Link to="/nosotros" className={`hover:underline ${activo("/nosotros") ? "negrita" : ""}`}>Nosotros</Link>
                     <Link to="/historia" className={`hover:underline ${activo("/historia") ? "negrita" : ""}`}>Historia</Link>
