@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import type { Url } from "./Administrador/Deportes";
-import { useFetch } from "../Hooks_Personalizados/UseFetch";
-import { useAuth } from "../Auth/AuthContext";
+import type { Url } from "../Administrador/Deportes";
+import { useFetch } from "../../Hooks_Personalizados/UseFetch";
+import { useAuth } from "../../Auth/AuthContext";
 import { useNavigate } from "react-router-dom";
 
 export function Equipos({ url }: Url) {

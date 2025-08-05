@@ -113,7 +113,7 @@ export function UsuariosListado({ url }: Url) {
             {data && (
                 <div>
                     <div className="bg-white p-3 rounded-md shadow-sm mb-4">
-                        <p className="mb-4 font-bold text-lg">{location.pathname == '/panel/usuarios/listado' ? "Usuarios" : "Trabajadores"}</p>
+                        <p className="mb-4 font-bold text-lg">{location.pathname == '/panel/usuarios/listado' ? "Usuarios" : "Administradores"}</p>
 
                         {/* Botón de mostrar filtros */}
                         <div className={`mb-4`}>

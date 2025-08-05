@@ -16,10 +16,11 @@ import { UsuariosAccesos } from "../Paginas/Administrador/UsuariosAccesos";
 import { Deportes } from "../Paginas/Administrador/Deportes";
 import { Prueba } from "../Paginas/Prueba";
 import { Torneos } from "../Paginas/Torneos";
-import { Equipos } from "../Paginas/Equipos";
+import { Equipos } from "../Paginas/Equipos/Equipos";
 import { Footer } from "../Paginas/Footer";
 import { LegalFooter } from "../Componentes_Personalizados/LegalFooter";
 import { Cookies } from "../Componentes_Personalizados/Cookies";
+import { EquiposDatos } from "../Paginas/Equipos/EquiposDatos";
 
 export function AppRouter() {
     function Layout() {
@@ -170,8 +171,8 @@ export function AppRouter() {
                             <Route
                                 path="equipos/:id"
                                 element={
-                                    <PrivateRoute requiredRole={[1]}>
-                                        <Prueba />
+                                    <PrivateRoute requiredRole={[1, 2, 3]}>
+                                        <EquiposDatos url={`http://localhost:5170/api/Equipos/`} />
                                     </PrivateRoute>
                                 }
                             />
