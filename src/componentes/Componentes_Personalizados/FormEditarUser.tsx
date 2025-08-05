@@ -68,7 +68,7 @@ export function EditarUser({ datos, visible, id, mensaje }: EditarDatos) {
                         </div>
                     </div>
                     <div className="flex justify-end mt-4 space-x-2 text-white">
-                        <button type="button" onClick={visible} className="p-1 rounded-sm bg-red-500 hover:bg-red-600 cursor-pointer">Cancelar</button>
+                        <button type="button" onClick={visible} className="p-1 rounded-sm bg-red-700 hover:bg-red-600 cursor-pointer">Cancelar</button>
                         <button type="submit" className="p-1 rounded-sm bg-emerald-600 hover:bg-emerald-700 text-white cursor-pointer">Guardar</button>
                     </div>
                 </div>

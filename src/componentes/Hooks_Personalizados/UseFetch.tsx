@@ -36,6 +36,7 @@ export function useFetch() {
             });
 
             setData(response.data);
+            return response.data;
         } catch (err: any) {
             setError(err.response?.data?.message || err.message || "Error");
             setData(null);

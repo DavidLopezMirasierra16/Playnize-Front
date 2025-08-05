@@ -14,7 +14,7 @@ interface PrivateRouteProps {
 const PrivateRoute = ({ children, requiredRole }: PrivateRouteProps) => {
   const { token, rol } = useAuth();
 
-  if (!token) return <Navigate to="/" replace />; //No token => '/'
+  if (!token) return <Navigate to="/login" replace />; //No token => '/panel'
   if (requiredRole && (Array.isArray(requiredRole) ? !requiredRole.includes(rol ?? -1) : rol !== requiredRole)) {
     return <Navigate to="/panel" replace />; //No permiso => '/panel'
   }

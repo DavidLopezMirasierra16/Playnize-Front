@@ -207,10 +207,3 @@ export function UsuariosListado({ url }: Url) {
         </>
     )
 }
-
-/**
- * Listado de los usuarios y sus roles
- */
-export function UsuariosPermisos() {
-
-}
