@@ -22,7 +22,7 @@ export function UsuariosListado({ url }: Url) {
 
     const location = useLocation();
     const { data, loading, error, fetchData } = useFetch();
-    const { token } = useAuth();
+    const { token, mensaje } = useAuth();
     const navegate = useNavigate();
     const [pagina, setPagina] = useState<number>(1);
     const [visible, setVisible] = useState<boolean>(false);
@@ -95,6 +95,16 @@ export function UsuariosListado({ url }: Url) {
         navegate(`/panel/usuarios/${id}`);
     }
 
+    const handleRegistro = () => {
+        navegate(`/panel/usuarios/registro`);
+    }
+
+    useEffect(() => {
+        if (mensaje != null) {
+            console.log(mensaje);
+        }
+    }, [mensaje]);
+
     return (
         <>
             {error ? (
@@ -110,19 +120,35 @@ export function UsuariosListado({ url }: Url) {
                 </div>
             ) : null}
 
+            {mensaje && (
+                <div className="bg-gradient-to-l from-lime-500 via-green-500 to-emerald-500 rounded-md p-2 mb-4">
+                    <p className="text-white">{mensaje}</p>
+                </div>
+            )}
+
             {data && (
                 <div>
                     <div className="bg-white p-3 rounded-md shadow-sm mb-4">
                         <p className="mb-4 font-bold text-lg">{location.pathname == '/panel/usuarios/listado' ? "Usuarios" : "Administradores"}</p>
 
                         {/* Botón de mostrar filtros */}
-                        <div className={`mb-4`}>
-                            <button onClick={handleVisible} className="flex flex-wrap items-center cursor-pointer bg-[#1E2939] p-1 rounded-sm text-white hover:bg-[#374151]">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-5">
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-9.75 0h9.75" />
-                                </svg>
-                                {!visible ? 'Filtros' : 'Ocultar'}
-                            </button>
+                        <div className="flex flex-wrap gap-2">
+                            <div className={`mb-4`}>
+                                <button onClick={handleVisible} className="flex flex-wrap gap-1 items-center cursor-pointer bg-[#1E2939] p-1 rounded-sm text-white hover:bg-[#374151]">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-5">
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-9.75 0h9.75" />
+                                    </svg>
+                                    {!visible ? 'Filtros' : 'Ocultar'}
+                                </button>
+                            </div>
+                            <div className={`mb-4`}>
+                                <button onClick={handleRegistro} className="flex flex-wrap gap-1 items-center cursor-pointer bg-[#1E2939] p-1 rounded-sm text-white hover:bg-[#374151]">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-5">
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M18 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0ZM3 19.235v-.11a6.375 6.375 0 0 1 12.75 0v.109A12.318 12.318 0 0 1 9.374 21c-2.331 0-4.512-.645-6.374-1.766Z" />
+                                    </svg>
+                                    Registrar
+                                </button>
+                            </div>
                         </div>
 
                         {/* Filtros */}

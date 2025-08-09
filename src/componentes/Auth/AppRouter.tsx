@@ -21,6 +21,7 @@ import { Footer } from "../Paginas/Footer";
 import { LegalFooter } from "../Componentes_Personalizados/LegalFooter";
 import { Cookies } from "../Componentes_Personalizados/Cookies";
 import { EquiposDatos } from "../Paginas/Equipos/EquiposDatos";
+import { UsuarioRegistro } from "../Paginas/Administrador/UsuarioRegistro";
 
 export function AppRouter() {
     function Layout() {
@@ -82,6 +83,14 @@ export function AppRouter() {
                             />
 
                             {/* Usuarios */}
+                            <Route
+                                path="usuarios/registro"
+                                element={
+                                    <PrivateRoute requiredRole={[1]}>
+                                        <UsuarioRegistro />
+                                    </PrivateRoute>
+                                }
+                            />
                             <Route
                                 path="usuarios/listado"
                                 element={
