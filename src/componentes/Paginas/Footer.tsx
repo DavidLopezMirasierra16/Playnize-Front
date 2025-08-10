@@ -8,11 +8,11 @@ export function Footer() {
                 <div className="w-3/12 m-auto md:m-0 md:w-4/12 lg:w-3/12 text-center">
                     <img src="/imagenes/Playnize LOGO-No-Fondo2.png" alt="Logo playnize" className="w-10/12 m-auto" />
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 text-center md:text-start">
+                <div className="grid grid-cols-1 md:grid-cols-2 text-center md:text-start ">
                     <div className="grid grid-cols-1 md:gap-5 lg:gap-0 lg:grid-cols-2 md:border-r border-gray-500">
                         <div className="flex flex-col gap-2 border-b border-gray-500 md:border-b-0 md:border-r p-2 md:p-0">
                             <p className="text-lg">Eventos</p>
-                            <p>Mis inscripciones</p>
+                            <p>Información</p>
                             <p>Organizar</p>
                             <p>Explorar</p>
                         </div>
@@ -27,6 +27,9 @@ export function Footer() {
                             <Link to="/cookies" style={{ color: "white", fontWeight: "normal" }}
                                 onMouseEnter={e => e.currentTarget.style.color = "#d1d5db"}
                                 onMouseLeave={e => e.currentTarget.style.color = "white"}>Cookies</Link>
+                            <Link to="/imagenes" style={{ color: "white", fontWeight: "normal" }}
+                                onMouseEnter={e => e.currentTarget.style.color = "#d1d5db"}
+                                onMouseLeave={e => e.currentTarget.style.color = "white"}>Imágenes</Link>
                         </div>
                     </div>
                     <div className="flex flex-col gap-2 p-2 md:p-0 md:ms-3">

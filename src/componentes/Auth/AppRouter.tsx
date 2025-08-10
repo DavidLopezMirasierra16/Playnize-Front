@@ -22,6 +22,7 @@ import { LegalFooter } from "../Componentes_Personalizados/LegalFooter";
 import { Cookies } from "../Componentes_Personalizados/Cookies";
 import { EquiposDatos } from "../Paginas/Equipos/EquiposDatos";
 import { UsuarioRegistro } from "../Paginas/Administrador/UsuarioRegistro";
+import { Inicio } from "../Paginas/Inicio";
 
 export function AppRouter() {
     function Layout() {
@@ -39,7 +40,7 @@ export function AppRouter() {
                     <Routes>
 
                         {/* Rutas Header */}
-                        <Route path="/" element={<div>Inicio</div>} />
+                        <Route path="/" element={<Inicio />} />
                         <Route path="/historia" element={<div>Historia</div>} />
                         <Route path="/login" element={<Login />} />
                         <Route path="/registro" element={<Register />} />
@@ -203,6 +204,7 @@ export function AppRouter() {
                         <Route path="/privacidad" element={<LegalFooter opcion="privacidad" />} />
                         <Route path="/terminos" element={<LegalFooter opcion="terminos" />} />
                         <Route path="/cookies" element={<LegalFooter opcion="cookies" />} />
+                        <Route path="/imagenes" element={<LegalFooter opcion="imagenes" />} />
 
                     </Routes>
                 </section>

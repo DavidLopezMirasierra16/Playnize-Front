@@ -77,9 +77,31 @@ export const MensajeFooter = {
                     Al usar nuestra plataforma, aceptas el uso de cookies. Puedes configurar o desactivar las cookies desde la configuración de tu navegador.
                 </li>
                 <li><strong>Más información:</strong><br>
-                    Para cualquier duda sobre nuestras cookies, contáctanos en <a href="mailto:playnize@gmail.com" class="text-blue-600 underline">playnize@gmail.com</a>.
+                    Para cualquier duda sobre nuestras cookies, contáctanos en <a href="mailto:playnize@gmail.com">playnize@gmail.com</a>.
                 </li>
             </ol>
+        </div>
+    `,
+    imagenes: `
+        <div class="bg-white rounded-md shadow-sm p-5">
+            <p class="text-xl mb-2">Declaración de Uso Libre de Imágenes y Logo</p>
+            <p class="mb-1">
+                Las imágenes fueron generadas mediante la inteligencia artificial GPT-5 de OpenAI, la herramienta Pixlr Image Generator
+                y el logotipo fue creado en la plataforma Canva utilizando únicamente elementos propios o de uso libre proporcionados por la herramienta.
+                Dichos contenidos:
+            </p>
+            <ol class="list-decimal pl-5 mb-1 p-1 space-y-2">
+                <li><strong>No se basan en material existente con derechos de autor.</strong></li>
+                <li><strong>No proceden de bancos de imágenes, fotografías o ilustraciones preexistentes con licencia restrictiva.</strong></li>
+                <li><strong>Fueron creados desde cero o mediante elementos libres en el momento de la solicitud o diseño.</strong></li>
+            </ol>
+            <p class="mb-1">
+                De acuerdo con las políticas de OpenAI, Pixlr y Canva (en el uso de elementos libres o propios), el contenido se encuentra libre de derechos de autor
+                y puede ser utilizado, modificado y distribuido por mí sin restricciones, incluyendo fines comerciales.
+            </p>
+            <p>
+                En consecuencia, se considera que las imágenes y el logo son de uso libre y no infringen derechos de terceros.
+            </p>
         </div>
     `
 }

@@ -27,8 +27,8 @@ export function Cookies() {
                             Al continuar navegando aceptas nuestra política de cookies. Puedes cambiar tus preferencias desde la configuración del navegador. Para continuar navegando, es necesario aceptar nuestra política de cookies.
                         </p>
                         <div className="flex gap-5">
-                            <button onClick={handlerAceptar} className="cursor-pointer">Aceptar</button>
-                            <button onClick={handleDenegar} className="cursor-pointer">Denegar</button>
+                            <button onClick={handlerAceptar} className="cursor-pointer hover:text-gray-300">Aceptar</button>
+                            <button onClick={handleDenegar} className="cursor-pointer hover:text-gray-300">Denegar</button>
                         </div>
                     </div>
 
