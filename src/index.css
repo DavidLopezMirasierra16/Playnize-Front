@@ -1,5 +1,30 @@
 @import "tailwindcss";
 
+/* Tipografía */
+
+@font-face {
+  font-family: 'Glacial Indifference';
+  src: url('/fonts/GlacialIndifference-Regular.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Glacial Indifference';
+  src: url('/fonts/GlacialIndifference-Bold.otf') format('opentype');
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Glacial Indifference';
+  src: url('/fonts/GlacialIndifference-Italic.otf') format('opentype');
+  font-weight: normal;
+  font-style: italic;
+}
+
+/* CSS */
+
 :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -14,6 +39,28 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+.font-glacial-regular {
+  font-family: 'Glacial Indifference', sans-serif;
+  font-weight: normal;
+  font-style: normal;
+}
+
+.font-glacial-bold {
+  font-family: 'Glacial Indifference', sans-serif;
+  font-weight: bold;
+  font-style: normal;
+}
+
+.font-glacial-italic {
+  font-family: 'Glacial Indifference', sans-serif;
+  font-weight: normal;
+  font-style: italic;
+}
+
+/* p{
+  font-family: "Glacial Indifference";
+} */
 
 a {
   font-weight: 500;
@@ -35,7 +82,7 @@ body {
   min-height: 100vh;
 }
 
-.fullpantalla{
+.fullpantalla {
   min-height: 100vh;
 }
 
@@ -45,18 +92,25 @@ h1 {
 }
 
 .mi-button {
-  width: 41.666667%;              /* Equivale a w-5/12 */
-  background-color: #1f2937;      /* bg-gray-800 */
-  color: #ffffff;                 /* text-white */
-  padding-top: 0.25rem;           /* py-1 */
+  width: 41.666667%;
+  /* Equivale a w-5/12 */
+  background-color: #1f2937;
+  /* bg-gray-800 */
+  color: #ffffff;
+  /* text-white */
+  padding-top: 0.25rem;
+  /* py-1 */
   padding-bottom: 0.25rem;
-  border-radius: 0.5rem;          /* rounded-lg */
-  transition: background-color 200ms; /* duration-200 */
+  border-radius: 0.5rem;
+  /* rounded-lg */
+  transition: background-color 200ms;
+  /* duration-200 */
   cursor: pointer;
 }
 
 .mi-button:hover {
-  background-color: #374151;      /* bg-gray-700 */
+  background-color: #374151;
+  /* bg-gray-700 */
 }
 
 /* button {
@@ -94,11 +148,12 @@ button:focus-visible {
     background-color: #EFEBDE;
   } */
 
-  .btn_sesion{
+  .btn_sesion {
     /* background-color: #FAF9F6; */
     background-color: #646cff;
   }
-  .btn_sesion:hover{
+
+  .btn_sesion:hover {
     /* background-color: #FAF9F6; */
     background-color: #2f3aff;
   }
