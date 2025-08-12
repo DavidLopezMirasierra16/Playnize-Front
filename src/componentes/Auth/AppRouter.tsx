@@ -85,14 +85,6 @@ export function AppRouter() {
 
                             {/* Usuarios */}
                             <Route
-                                path="usuarios/registro"
-                                element={
-                                    <PrivateRoute requiredRole={[1]}>
-                                        <UsuarioRegistro />
-                                    </PrivateRoute>
-                                }
-                            />
-                            <Route
                                 path="usuarios/listado"
                                 element={
                                     <PrivateRoute requiredRole={[1]}>
@@ -105,6 +97,14 @@ export function AppRouter() {
                                 element={
                                     <PrivateRoute requiredRole={[1]}>
                                         <UsuariosListado url={`http://localhost:5170/api/Usuario/Admin?`} />
+                                    </PrivateRoute>
+                                }
+                            />
+                            <Route
+                                path="usuarios/registro"
+                                element={
+                                    <PrivateRoute requiredRole={[1]}>
+                                        <UsuarioRegistro />
                                     </PrivateRoute>
                                 }
                             />
@@ -136,6 +136,14 @@ export function AppRouter() {
                             {/* Deportes */}
                             <Route
                                 path="deportes"
+                                element={
+                                    <PrivateRoute requiredRole={[1]}>
+                                        <Deportes url={`http://localhost:5170/api/Deportes`} />
+                                    </PrivateRoute>
+                                }
+                            />
+                            <Route
+                                path="deportes/registro"
                                 element={
                                     <PrivateRoute requiredRole={[1]}>
                                         <Deportes url={`http://localhost:5170/api/Deportes`} />

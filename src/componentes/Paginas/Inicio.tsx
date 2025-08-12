@@ -4,7 +4,7 @@ export function Inicio() {
             <img src="/imagenes/Banner_Home.png" alt="Banner del Home" className="" />
             <div className="mt-10 font-glacial-bold text-lg md:text-2xl lg:text-4xl uppercase gap-2 flex flex-wrap justify-center">
                 <p className="">Explora una nueva forma de organizar</p>
-                <p className="bg-clip-text text-transparent bg-gradient-to-r from-pink-600 to-blue-600">torneos</p>
+                <p className="rounded-md ps-2 pr-2 text-white bg-gradient-to-l from-emerald-500 via-teal-500 to-cyan-500">torneos</p>
             </div>
             <div className="bg-white rounded-md shadow-sm p-5 mt-6">
                 <p>Inicio</p>

@@ -119,15 +119,15 @@ export function UsuarioRegistro() {
                                         <p className="text-sm text-black">Rol</p>
                                         <div className="flex flex-wrap gap-3 justify-center lg:justify-around">
                                             <div className="flex flex-wrap gap-2 ">
-                                                <input type="radio" name="Rol" value="1" onChange={handleDatos} />
+                                                <input type="radio" name="Rol" value="1" onChange={handleDatos} required />
                                                 <p className="text-sm">Administrador/a</p>
                                             </div>
                                             <div className="flex flex-wrap gap-2 ">
-                                                <input type="radio" name="Rol" value="2" onChange={handleDatos} />
+                                                <input type="radio" name="Rol" value="2" onChange={handleDatos} required />
                                                 <p className="text-sm">Organizador/a</p>
                                             </div>
                                             <div className="flex flex-wrap gap-2 ">
-                                                <input type="radio" name="Rol" value="3" onChange={handleDatos} />
+                                                <input type="radio" name="Rol" value="3" onChange={handleDatos} required />
                                                 <p className="text-sm">Participante</p>
                                             </div>
                                         </div>

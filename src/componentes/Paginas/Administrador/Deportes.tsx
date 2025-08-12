@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useFetch } from "../../Hooks_Personalizados/UseFetch"
 import { useAuth } from "../../Auth/AuthContext";
 import { useNavigate } from "react-router-dom";
+import { RegistrarDeporte } from "../../Componentes_Personalizados/FromRegistrarDeporte";
 
 export interface Url {
     url: string
@@ -31,6 +32,7 @@ export function Deportes({ url }: Url) {
     const { data, loading, error, fetchData } = useFetch();
     const [pagina, setPagina] = useState<number>(1);
     const [visible, setVisible] = useState<boolean>(false);
+    const [visibleForm, setVisibleForm] = useState<boolean>(false);
     const [buscar, setBuscar] = useState<Busqueda>({
         deporte: '',
         colectivo: '',
@@ -96,6 +98,10 @@ export function Deportes({ url }: Url) {
         navegate(`/panel/deportes/${id}`)
     }
 
+    const handleVisibleForm = () => {
+        setVisibleForm(!visibleForm);
+    }
+
     return (
         <>
             {error ? (
@@ -117,14 +123,26 @@ export function Deportes({ url }: Url) {
                         <p className="mb-4 font-bold text-lg">Deportes</p>
 
                         {/* Botón de mostrar filtros */}
-                        <div className={`mb-4`}>
-                            <button onClick={handleVisible} className="flex flex-wrap gap-1 items-center cursor-pointer bg-[#1E2939] p-1 rounded-sm text-white hover:bg-[#374151]">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-5">
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-9.75 0h9.75" />
-                                </svg>
-                                {!visible ? 'Filtros' : 'Ocultar'}
-                            </button>
+                        <div className="flex flex-wrap gap-2">
+                            <div className={`mb-4`}>
+                                <button onClick={handleVisible} className="flex flex-wrap gap-1 items-center cursor-pointer bg-[#1E2939] p-1 rounded-sm text-white hover:bg-[#374151]">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-5">
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-9.75 0h9.75" />
+                                    </svg>
+                                    {!visible ? 'Filtros' : 'Ocultar'}
+                                </button>
+                            </div>
+                            <div className={`mb-4`}>
+                                <button onClick={handleVisibleForm} className="flex flex-wrap gap-1 items-center cursor-pointer bg-[#1E2939] p-1 rounded-sm text-white hover:bg-[#374151]">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-5">
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                                    </svg>
+                                    <span>Registrar</span>
+                                </button>
+                            </div>
                         </div>
+
+                        {visibleForm && <RegistrarDeporte visible={handleVisibleForm} />}
 
                         {/* Filtros */}
                         <form onSubmit={handleSubmit}>
@@ -187,7 +205,7 @@ export function Deportes({ url }: Url) {
                                                 <p className="text-base font-medium text-gray-800 break-words truncate">{d.torneos}</p>
                                             </div>
                                             <div>
-                                                <button title="Editar deporte" onClick={()=>handleRedirect(d.id)} className=" cursor-pointer bg-[#ff9900] p-1 rounded-sm text-white hover:bg-[#ffbc58]">
+                                                <button title="Editar deporte" onClick={() => handleRedirect(d.id)} className=" cursor-pointer bg-[#ff9900] p-1 rounded-sm text-white hover:bg-[#ffbc58]">
                                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-5">
                                                         <path d="M21.731 2.269a2.625 2.625 0 0 0-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 0 0 0-3.712ZM19.513 8.199l-3.712-3.712-8.4 8.4a5.25 5.25 0 0 0-1.32 2.214l-.8 2.685a.75.75 0 0 0 .933.933l2.685-.8a5.25 5.25 0 0 0 2.214-1.32l8.4-8.4Z" />
                                                         <path d="M5.25 5.25a3 3 0 0 0-3 3v10.5a3 3 0 0 0 3 3h10.5a3 3 0 0 0 3-3V13.5a.75.75 0 0 0-1.5 0v5.25a1.5 1.5 0 0 1-1.5 1.5H5.25a1.5 1.5 0 0 1-1.5-1.5V8.25a1.5 1.5 0 0 1 1.5-1.5h5.25a.75.75 0 0 0 0-1.5H5.25Z" />
