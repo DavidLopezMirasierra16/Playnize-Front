@@ -3,7 +3,6 @@ import { useFetch } from "../../Hooks_Personalizados/UseFetch"
 import { useAuth } from "../../Auth/AuthContext";
 import { useLocation, useNavigate } from "react-router-dom";
 import type { Url } from "./Deportes";
-import { Boton } from "../../Componentes_Personalizados/BotonPrincipal";
 
 /**
  * Listado con todos los usuarios, le pasamos la url de la petición y listo.

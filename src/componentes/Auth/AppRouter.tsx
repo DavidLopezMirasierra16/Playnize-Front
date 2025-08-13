@@ -150,14 +150,6 @@ export function AppRouter() {
                                     </PrivateRoute>
                                 }
                             />
-                            <Route
-                                path="deportes/:id"
-                                element={
-                                    <PrivateRoute requiredRole={[1]}>
-                                        <UsuarioEditar />
-                                    </PrivateRoute>
-                                }
-                            />
 
                             {/* Torneos */}
                             <Route

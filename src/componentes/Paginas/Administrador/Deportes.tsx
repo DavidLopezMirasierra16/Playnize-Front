@@ -3,6 +3,7 @@ import { useFetch } from "../../Hooks_Personalizados/UseFetch"
 import { useAuth } from "../../Auth/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { RegistrarDeporte } from "../../Componentes_Personalizados/FromRegistrarDeporte";
+import axios from "axios";
 
 export interface Url {
     url: string
@@ -18,7 +19,7 @@ interface Deporte {
     torneos: number
 }
 
-interface Busqueda {
+export interface Busqueda {
     deporte: string,
     colectivo: string,
     minimoPorEquipo: string,
@@ -27,8 +28,7 @@ interface Busqueda {
 
 export function Deportes({ url }: Url) {
 
-    const { token } = useAuth();
-    const navegate = useNavigate();
+    const { token, mensaje, setMensaje } = useAuth();
     const { data, loading, error, fetchData } = useFetch();
     const [pagina, setPagina] = useState<number>(1);
     const [visible, setVisible] = useState<boolean>(false);
@@ -47,6 +47,13 @@ export function Deportes({ url }: Url) {
         maximoPorEquipo: ''
     });
 
+    //-------------------------------- EDITAR ---------------------------------
+
+    const [visibleFormEditar, setVisibleFormEditar] = useState<boolean>(false);
+    const [id, setId] = useState<number>();
+
+    //-------------------------------- CREAR Y FILTRAR ---------------------------------
+
     useEffect(() => {
         const params = new URLSearchParams();
         params.append('page', pagina.toString());
@@ -57,7 +64,7 @@ export function Deportes({ url }: Url) {
         if (buscar.maximoPorEquipo) params.append('maximo', buscar.maximoPorEquipo.trim());
 
         fetchData(url + `?${params.toString()}`, 'get', {}, token);
-    }, [pagina, url, buscar]);
+    }, [pagina, url, buscar, visibleForm, visibleFormEditar]);
 
     const handleVisible = () => {
         setVisible(!visible);
@@ -94,13 +101,40 @@ export function Deportes({ url }: Url) {
         setPagina(1);
     }
 
-    const handleRedirect = (id: number) => {
-        navegate(`/panel/deportes/${id}`)
-    }
-
     const handleVisibleForm = () => {
         setVisibleForm(!visibleForm);
     }
+
+    //-------------------------------- EDITAR ---------------------------------
+
+    const handleDataDeporte = async (id: number) => {
+        const datos_editar = await axios.get(`http://localhost:5170/api/Deportes/${id}`, {
+            headers: {
+                Authorization: token ? `Bearer ${token}` : ''
+            }
+        });
+        setFiltros(datos_editar.data.deporte);
+        setVisibleFormEditar(!visibleFormEditar);
+        setId(id);
+    }
+
+    const handleVisibleFormEditar = () => {
+        setVisibleFormEditar(!visibleFormEditar);
+        setFiltros({
+            deporte: '',
+            colectivo: '',
+            minimoPorEquipo: '',
+            maximoPorEquipo: ''
+        });
+    }
+
+    useEffect(() => {
+        if (mensaje) {
+            setInterval(() => {
+                setMensaje(null);
+            }, 7000);
+        }
+    }, [mensaje]);
 
     return (
         <>
@@ -116,6 +150,12 @@ export function Deportes({ url }: Url) {
                     <div className="w-12 h-12 border-4 border-white border-t-transparent rounded-full animate-spin"></div>
                 </div>
             ) : null}
+
+            {mensaje && (
+                <div className="bg-gradient-to-l from-lime-500 via-green-500 to-emerald-500 rounded-md p-2 mb-4">
+                    <p className="text-white">{mensaje}</p>
+                </div>
+            )}
 
             {data && (
                 <div>
@@ -142,7 +182,11 @@ export function Deportes({ url }: Url) {
                             </div>
                         </div>
 
+                        {/* Registrar */}
                         {visibleForm && <RegistrarDeporte visible={handleVisibleForm} />}
+
+                        {/* Editar */}
+                        {visibleFormEditar && <RegistrarDeporte visible={handleVisibleFormEditar} id={id} datosEditar={filtro} />}
 
                         {/* Filtros */}
                         <form onSubmit={handleSubmit}>
@@ -189,7 +233,7 @@ export function Deportes({ url }: Url) {
                                                 <p className="text-base font-medium text-gray-800 break-words truncate">{d.deporte}</p>
                                             </div>
                                             <div>
-                                                <p className="text-sm text-gray-500">Colectivo</p>
+                                                <p className="text-sm text-gray-500">Estado</p>
                                                 <p className="text-base font-medium text-gray-800 break-words truncate">{d.colectivo == '1' ? "Colectivo" : "Individual"}</p>
                                             </div>
                                             <div className="mt-2 md:mt-0">
@@ -205,7 +249,7 @@ export function Deportes({ url }: Url) {
                                                 <p className="text-base font-medium text-gray-800 break-words truncate">{d.torneos}</p>
                                             </div>
                                             <div>
-                                                <button title="Editar deporte" onClick={() => handleRedirect(d.id)} className=" cursor-pointer bg-[#ff9900] p-1 rounded-sm text-white hover:bg-[#ffbc58]">
+                                                <button title="Editar deporte" onClick={() => handleDataDeporte(d.id)} className=" cursor-pointer bg-[#ff9900] p-1 rounded-sm text-white hover:bg-[#ffbc58]">
                                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-5">
                                                         <path d="M21.731 2.269a2.625 2.625 0 0 0-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 0 0 0-3.712ZM19.513 8.199l-3.712-3.712-8.4 8.4a5.25 5.25 0 0 0-1.32 2.214l-.8 2.685a.75.75 0 0 0 .933.933l2.685-.8a5.25 5.25 0 0 0 2.214-1.32l8.4-8.4Z" />
                                                         <path d="M5.25 5.25a3 3 0 0 0-3 3v10.5a3 3 0 0 0 3 3h10.5a3 3 0 0 0 3-3V13.5a.75.75 0 0 0-1.5 0v5.25a1.5 1.5 0 0 1-1.5 1.5H5.25a1.5 1.5 0 0 1-1.5-1.5V8.25a1.5 1.5 0 0 1 1.5-1.5h5.25a.75.75 0 0 0 0-1.5H5.25Z" />

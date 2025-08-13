@@ -79,11 +79,11 @@ export function UsuarioRegistro() {
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 lg:w-8/12">
                                     <div>
                                         <p className="text-sm text-black">Nombre</p>
-                                        <input type="text" value={datos.Nombre} name="Nombre" onChange={handleDatos} className="bg-white border border-[#868686] rounded-sm w-10/12" />
+                                        <input type="text" value={datos.Nombre} name="Nombre" required onChange={handleDatos} className="bg-white border border-[#868686] rounded-sm w-10/12" />
                                     </div>
                                     <div>
                                         <p className="text-sm text-black">Apellidos</p>
-                                        <input type="text" value={datos.Apellidos} name="Apellidos" onChange={handleDatos} className="bg-white border border-[#868686] rounded-sm w-10/12 lg:w-12/12" />
+                                        <input type="text" value={datos.Apellidos} name="Apellidos" required onChange={handleDatos} className="bg-white border border-[#868686] rounded-sm w-10/12 lg:w-12/12" />
                                     </div>
                                 </div>
                             </div>
@@ -96,11 +96,11 @@ export function UsuarioRegistro() {
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 lg:w-8/12">
                                     <div>
                                         <p className="text-sm text-black">Email</p>
-                                        <input type="text" value={datos.Email} name="Email" onChange={handleDatos} className="bg-white border border-[#868686] rounded-sm w-10/12" />
+                                        <input type="text" value={datos.Email} name="Email" required onChange={handleDatos} className="bg-white border border-[#868686] rounded-sm w-10/12" />
                                     </div>
                                     <div>
                                         <p className="text-sm text-black">Teléfono</p>
-                                        <input type="text" value={datos.Telefono} name="Telefono" onChange={handleDatos} className="bg-white border border-[#868686] rounded-sm w-10/12 lg:w-12/12" />
+                                        <input type="text" value={datos.Telefono} name="Telefono" required onChange={handleDatos} className="bg-white border border-[#868686] rounded-sm w-10/12 lg:w-12/12" />
                                     </div>
                                 </div>
                             </div>
@@ -113,7 +113,7 @@ export function UsuarioRegistro() {
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 lg:w-8/12">
                                     <div>
                                         <p className="text-sm text-black">Contraseña</p>
-                                        <input type="text" value={datos.Clave} name="Clave" onChange={handleDatos} className="bg-white border border-[#868686] rounded-sm w-10/12" />
+                                        <input type="text" value={datos.Clave} name="Clave" onChange={handleDatos} className="bg-white border border-[#868686] rounded-sm w-10/12" required />
                                     </div>
                                     <div className="flex flex-col gap-1">
                                         <p className="text-sm text-black">Rol</p>
