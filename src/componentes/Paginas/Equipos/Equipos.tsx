@@ -127,15 +127,15 @@ export function Equipos({ url }: Url) {
                             <div className={`mb-4 grid grid-cols-1 gap-2 text-center sm:text-start sm:grid-cols-2 sm:gap-0 md:grid-cols-3 xl:grid-cols-5 bg-white p-3 rounded-md shadow-sm max-w-6xl ${visible ? 'block' : 'hidden'}`}>
                                 <div>
                                     <p className="text-sm text-gray-500">Nombre</p>
-                                    <input type="text" name="nombre" id="nombre" value={filtro.nombre} onChange={handleChangeFiltro} className="border border-[#868686] rounded-sm" />
+                                    <input type="text" name="nombre" id="nombre" value={filtro.nombre} onChange={handleChangeFiltro} className="ps-1 border border-[#868686] rounded-sm" />
                                 </div>
                                 <div>
                                     <p className="text-sm text-gray-500">Nº de integrantes</p>
-                                    <input type="number" min="0" name="integrante" id="integrante" value={filtro.integrante} onChange={handleChangeFiltro} className="border border-[#868686] rounded-sm" />
+                                    <input type="number" min="0" name="integrante" id="integrante" value={filtro.integrante} onChange={handleChangeFiltro} className="ps-1 border border-[#868686] rounded-sm" />
                                 </div>
                                 <div>
                                     <p className="text-sm text-gray-500">Nº de torneos</p>
-                                    <input type="number" min="0" name="torneos" id="torneos" value={filtro.torneos} onChange={handleChangeFiltro} className="border border-[#868686] rounded-sm" />
+                                    <input type="number" min="0" name="torneos" id="torneos" value={filtro.torneos} onChange={handleChangeFiltro} className="ps-1 border border-[#868686] rounded-sm" />
                                 </div>
                                 <div>
                                     <p className="text-sm text-gray-500">Equipo</p>

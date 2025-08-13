@@ -1,9 +1,19 @@
 import { useEffect, useState } from "react";
-import { useAuth } from "../Auth/AuthContext";
-import { useFetch } from "../Hooks_Personalizados/UseFetch";
-import type { Url } from "./Administrador/Deportes";
+import { useAuth } from "../../Auth/AuthContext";
+import { useFetch } from "../../Hooks_Personalizados/UseFetch";
+import type { Url } from "../Administrador/Deportes";
 import { useNavigate } from "react-router-dom";
-import { Activo, Finalizado, NoEmpezado } from "./Estados";
+import { Activo, Finalizado, NoEmpezado } from "../Estados";
+import { Boton } from "../../Componentes_Personalizados/BotonPrincipal";
+
+export interface Torneo {
+    nombre: string,
+    premio: string,
+    fechaInicio: string,
+    fechaFin: string,
+    localizacion: string,
+    deporte: string,
+}
 
 export function Torneos({ url }: Url) {
 
@@ -18,7 +28,7 @@ export function Torneos({ url }: Url) {
         email: string
     }
 
-    interface Torneo {
+    interface TorneoData {
         $id: string,
         id: number,
         nombre: string,
@@ -30,21 +40,12 @@ export function Torneos({ url }: Url) {
         organizador: Organizador
     }
 
-    interface Busqueda {
-        nombre: string,
-        premio: string,
-        fechaInicio: string,
-        fechaFin: string,
-        localizacion: string,
-        deporte: string,
-    }
-
     const { token, rol } = useAuth();
     const { data, loading, error, fetchData } = useFetch();
     const [pagina, setPagina] = useState<number>(1);
     const [visible, setVisible] = useState<boolean>(false);
     const navegate = useNavigate();
-    const [buscar, setBuscar] = useState<Busqueda>({
+    const [buscar, setBuscar] = useState<Torneo>({
         nombre: '',
         premio: '',
         fechaInicio: '',
@@ -53,7 +54,7 @@ export function Torneos({ url }: Url) {
         deporte: ''
     });
 
-    const [filtro, setFiltros] = useState<Busqueda>({
+    const [filtro, setFiltros] = useState<Torneo>({
         nombre: '',
         premio: '',
         fechaInicio: '',
@@ -117,6 +118,10 @@ export function Torneos({ url }: Url) {
         navegate(`/panel/torneos/${id}`)
     }
 
+    const handleCreate = () => {
+        navegate(`/panel/torneos/registro`);
+    }
+
     return (
         <>
             {error ? (
@@ -138,13 +143,18 @@ export function Torneos({ url }: Url) {
                         <p className="mb-4 font-bold text-lg">{rol == 1 ? "Torneos" : "Tus torneos"}</p>
 
                         {/* Botón de mostrar filtros */}
-                        <div className={`mb-4`}>
-                            <button onClick={handleVisible} className="flex flex-wrap gap-1 items-center cursor-pointer bg-[#1E2939] p-1 rounded-sm text-white hover:bg-[#374151]">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-5">
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-9.75 0h9.75" />
-                                </svg>
-                                {!visible ? 'Filtros' : 'Ocultar'}
-                            </button>
+                        <div className="flex flex-wrap gap-2">
+                            <div className={`mb-4`}>
+                                <button onClick={handleVisible} className="flex flex-wrap gap-1 items-center cursor-pointer bg-[#1E2939] p-1 rounded-sm text-white hover:bg-[#374151]">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-5">
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-9.75 0h9.75" />
+                                    </svg>
+                                    {!visible ? 'Filtros' : 'Ocultar'}
+                                </button>
+                            </div>
+                            <div className={`mb-4`}>
+                                <Boton icono="registrar" mensaje="Registrar" accion={handleCreate} />
+                            </div>
                         </div>
 
                         {/* Filtros */}
@@ -152,7 +162,7 @@ export function Torneos({ url }: Url) {
                             <div className={`mb-4 grid grid-cols-1 gap-2 text-center sm:text-start sm:grid-cols-2 sm:gap-0 md:grid-cols-3 xl:grid-cols-5 bg-white p-3 rounded-md shadow-sm max-w-6xl ${visible ? 'block' : 'hidden'}`}>
                                 <div>
                                     <p className="text-sm text-gray-500">Torneo</p>
-                                    <input type="text" name="nombre" id="nombre" value={filtro.nombre} onChange={handleChangeFiltro} className="border border-[#868686] rounded-sm" />
+                                    <input type="text" name="nombre" id="nombre" value={filtro.nombre} onChange={handleChangeFiltro} className="ps-1 border border-[#868686] rounded-sm" />
                                 </div>
                                 <div>
                                     <p className="text-sm text-gray-500">Premio</p>
@@ -169,11 +179,11 @@ export function Torneos({ url }: Url) {
                                 </div> */}
                                 <div>
                                     <p className="text-sm text-gray-500">Deporte</p>
-                                    <input type="text" name="deporte" id="deporte" value={filtro.deporte} onChange={handleChangeFiltro} className="border border-[#868686] rounded-sm" />
+                                    <input type="text" name="deporte" id="deporte" value={filtro.deporte} onChange={handleChangeFiltro} className="ps-1 border border-[#868686] rounded-sm" />
                                 </div>
                                 <div>
                                     <p className="text-sm text-gray-500">Localización</p>
-                                    <input type="text" name="localizacion" id="localizacion" value={filtro.localizacion} onChange={handleChangeFiltro} className="border border-[#868686] rounded-sm" />
+                                    <input type="text" name="localizacion" id="localizacion" value={filtro.localizacion} onChange={handleChangeFiltro} className="ps-1 border border-[#868686] rounded-sm" />
                                 </div>
                                 <div className="mt-3 flex gap-2 items-end w-4/4">
                                     <button type="submit" className="w-12/12 cursor-pointer bg-[#1E2939] p-1 rounded-sm text-white hover:bg-[#374151]">
@@ -189,7 +199,7 @@ export function Torneos({ url }: Url) {
                         {/* Tabla */}
                         <div>
                             {data.datos.$values != 0 ? (
-                                data.datos.$values.map((t: Torneo, i: number) => {
+                                data.datos.$values.map((t: TorneoData, i: number) => {
                                     return (
                                         <div key={t.$id} className={`mb-5 items-center lg:gap-4 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-7 ${i === data.datos.$values.length - 1 ? '' : ' border-b-2 border-b-[#F3F4F6]'}`}>
                                             <div>

@@ -15,7 +15,7 @@ import { UsuarioEditar } from "../Paginas/Administrador/UsuarioEditar";
 import { UsuariosAccesos } from "../Paginas/Administrador/UsuariosAccesos";
 import { Deportes } from "../Paginas/Administrador/Deportes";
 import { Prueba } from "../Paginas/Prueba";
-import { Torneos } from "../Paginas/Torneos";
+import { Torneos } from "../Paginas/Torneos/Torneos";
 import { Equipos } from "../Paginas/Equipos/Equipos";
 import { Footer } from "../Paginas/Footer";
 import { LegalFooter } from "../Componentes_Personalizados/LegalFooter";
@@ -23,6 +23,7 @@ import { Cookies } from "../Componentes_Personalizados/Cookies";
 import { EquiposDatos } from "../Paginas/Equipos/EquiposDatos";
 import { UsuarioRegistro } from "../Paginas/Administrador/UsuarioRegistro";
 import { Inicio } from "../Paginas/Inicio";
+import { TorneoRegistro } from "../Paginas/Torneos/TorneoRegistro";
 
 export function AppRouter() {
     function Layout() {
@@ -142,14 +143,6 @@ export function AppRouter() {
                                     </PrivateRoute>
                                 }
                             />
-                            <Route
-                                path="deportes/registro"
-                                element={
-                                    <PrivateRoute requiredRole={[1]}>
-                                        <Deportes url={`http://localhost:5170/api/Deportes`} />
-                                    </PrivateRoute>
-                                }
-                            />
 
                             {/* Torneos */}
                             <Route
@@ -165,6 +158,14 @@ export function AppRouter() {
                                 element={
                                     <PrivateRoute requiredRole={[1, 2, 3]}>
                                         <Prueba />
+                                    </PrivateRoute>
+                                }
+                            />
+                            <Route
+                                path="torneos/registro"
+                                element={
+                                    <PrivateRoute requiredRole={[1, 2, 3]}>
+                                        <TorneoRegistro url={`http://localhost:5170/api/Torneo`} />
                                     </PrivateRoute>
                                 }
                             />

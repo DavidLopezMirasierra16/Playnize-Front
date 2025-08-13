@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useFetch } from "../../Hooks_Personalizados/UseFetch"
 import { useAuth } from "../../Auth/AuthContext";
-import { useNavigate } from "react-router-dom";
 import { RegistrarDeporte } from "../../Componentes_Personalizados/FromRegistrarDeporte";
 import axios from "axios";
 
@@ -193,7 +192,7 @@ export function Deportes({ url }: Url) {
                             <div className={`mb-4 grid grid-cols-1 gap-2 text-center sm:text-start sm:grid-cols-2 sm:gap-0 md:grid-cols-3 xl:grid-cols-5 bg-white p-3 rounded-md shadow-sm max-w-6xl ${visible ? 'block' : 'hidden'}`}>
                                 <div>
                                     <p className="text-sm text-gray-500">Deporte</p>
-                                    <input type="text" name="deporte" id="deporte" value={filtro.deporte} onChange={handleChangeFiltro} className="border border-[#868686] rounded-sm" />
+                                    <input type="text" name="deporte" id="deporte" value={filtro.deporte} onChange={handleChangeFiltro} className="ps-1 border border-[#868686] rounded-sm" />
                                 </div>
                                 <div>
                                     <p className="text-sm text-gray-500">Equipo</p>
@@ -205,11 +204,11 @@ export function Deportes({ url }: Url) {
                                 </div>
                                 <div>
                                     <p className="text-sm text-gray-500">Participantes minimos</p>
-                                    <input type="text" name="minimoPorEquipo" id="minimoPorEquipo" value={filtro.minimoPorEquipo} onChange={handleChangeFiltro} className="border border-[#868686] rounded-sm" />
+                                    <input type="text" name="minimoPorEquipo" id="minimoPorEquipo" value={filtro.minimoPorEquipo} onChange={handleChangeFiltro} className="ps-1 border border-[#868686] rounded-sm" />
                                 </div>
                                 <div>
                                     <p className="text-sm text-gray-500">Participantes máximos</p>
-                                    <input type="text" name="maximoPorEquipo" id="maximoPorEquipo" value={filtro.maximoPorEquipo} onChange={handleChangeFiltro} className="border border-[#868686] rounded-sm" />
+                                    <input type="text" name="maximoPorEquipo" id="maximoPorEquipo" value={filtro.maximoPorEquipo} onChange={handleChangeFiltro} className="ps-1 border border-[#868686] rounded-sm" />
                                 </div>
                                 <div className="mt-3 flex gap-2 items-end w-4/4">
                                     <button type="submit" className="w-12/12 cursor-pointer bg-[#1E2939] p-1 rounded-sm text-white hover:bg-[#374151]">

@@ -156,19 +156,19 @@ export function UsuariosListado({ url }: Url) {
                             <div className={`mb-4 grid grid-cols-1 gap-2 text-center sm:text-start sm:grid-cols-2 sm:gap-0 md:grid-cols-3 xl:grid-cols-5 bg-white p-3 rounded-md shadow-sm max-w-6xl ${visible ? 'block' : 'hidden'}`}>
                                 <div>
                                     <p className="text-sm text-gray-500">Nombre</p>
-                                    <input type="text" name="nombre" id="nombre" value={filtros.nombre} onChange={handleChangeFiltro} className="border border-[#868686] rounded-sm" />
+                                    <input type="text" name="nombre" id="nombre" value={filtros.nombre} onChange={handleChangeFiltro} className="ps-1 border border-[#868686] rounded-sm" />
                                 </div>
                                 <div>
                                     <p className="text-sm text-gray-500">Apellidos</p>
-                                    <input type="text" name="apellidos" id="apellidos" value={filtros.apellidos} onChange={handleChangeFiltro} className="border border-[#868686] rounded-sm" />
+                                    <input type="text" name="apellidos" id="apellidos" value={filtros.apellidos} onChange={handleChangeFiltro} className="ps-1 border border-[#868686] rounded-sm" />
                                 </div>
                                 <div className="mt-2 md:mt-0">
                                     <p className="text-sm text-gray-500">Teléfono</p>
-                                    <input type="text" name="telefono" id="telefono" value={filtros.telefono} onChange={handleChangeFiltro} className="border border-[#868686] rounded-sm" />
+                                    <input type="text" name="telefono" id="telefono" value={filtros.telefono} onChange={handleChangeFiltro} className="ps-1 border border-[#868686] rounded-sm" />
                                 </div>
                                 <div className="mt-2 xl:mt-0">
                                     <p className="text-sm text-gray-500">Email</p>
-                                    <input type="text" name="email" id="email" value={filtros.email} onChange={handleChangeFiltro} className="border border-[#868686] rounded-sm" />
+                                    <input type="text" name="email" id="email" value={filtros.email} onChange={handleChangeFiltro} className="ps-1 border border-[#868686] rounded-sm" />
                                 </div>
                                 <div className="mt-3 flex gap-2 items-end w-4/4">
                                     <button type="submit" className="w-12/12 cursor-pointer bg-[#1E2939] p-1 rounded-sm text-white hover:bg-[#374151]">

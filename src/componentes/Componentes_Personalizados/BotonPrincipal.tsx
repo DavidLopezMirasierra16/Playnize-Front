@@ -1,9 +1,11 @@
+import { Iconos } from "../Hooks_Personalizados/Iconos";
+
 type Tipo = "submit" | "reset" | "button" | undefined;
 
 interface MensajeBoton {
     type?: Tipo,
     accion?: () => void,
-    icono?: string,
+    icono?: keyof typeof Iconos,
     mensaje?: string,
     colores?: string
 }
@@ -13,7 +15,7 @@ export function Boton({ accion, type, mensaje, icono, colores }: MensajeBoton) {
 
     return (
         <button type={type} onClick={accion} className={`flex flex-wrap gap-1 items-center cursor-pointer p-1 rounded-sm ${colores ? colores : colores_base}`}>
-            {icono && icono}
+            {icono && <div dangerouslySetInnerHTML={{ __html: Iconos[icono] }} />}
             {mensaje && <span>{mensaje}</span>}
         </button>
     )
