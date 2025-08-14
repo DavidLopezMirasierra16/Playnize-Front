@@ -4,6 +4,7 @@ import { useFetch } from "../../Hooks_Personalizados/UseFetch";
 import type { Url } from "../Administrador/Deportes";
 import { useAuth } from "../../Auth/AuthContext";
 import { useEffect, useReducer, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 interface Deporte {
     $id: string,
@@ -14,26 +15,28 @@ interface Deporte {
 interface Torneo {
     nombre: string,
     premio: string,
-    fechaInicio: string,
-    fechaFin: string,
+    fecha_Inicio: string,
+    fecha_Fin: string,
     localizacion: string,
     deporte: string,
-    requisitos: string[]
+    requisitos: string[],
+    patrocinadores: string[]
 }
 
-interface Requisitos {
+//Éste vale tanto para requisitos como para patrocinadores
+interface Datos {
     id: number
-    requisito?: string
+    mensaje?: string
 }
 
 type Accion = "Add" | "Remove" | "Edit"
 
 interface AccionI {
     type: Accion,
-    payload: Requisitos
+    payload: Datos
 }
 
-const accionesRequisitos = (estado: Requisitos[], accion: AccionI): Requisitos[] => {
+const accionesRequisitos = (estado: Datos[], accion: AccionI): Datos[] => {
     switch (accion.type) {
         case "Add":
             return [...estado, accion.payload];
@@ -46,37 +49,82 @@ const accionesRequisitos = (estado: Requisitos[], accion: AccionI): Requisitos[]
 
 export function TorneoRegistro({ url }: Url) {
 
-    const { token } = useAuth();
-    const { loading, error } = useFetch();
+    const { token, setMensaje } = useAuth();
+    const navegate = useNavigate();
+    const { data, loading, error, fetchData } = useFetch();
     const [deportes, setDeportes] = useState<Deporte[]>([]);
     const [visibilidad, setVisbilidad] = useState({
         requisitos: false,
         patrocinadores: false
     });
     const hoy = new Date().toISOString().split("T")[0];
+    const [errores, setErrores] = useState({
+        requisitos: false,
+        patrocinadores: false
+    });
 
     //------------------------------ Requisitos ------------------------------
 
     const [requisitoInput, setRequisitoInput] = useState('');
     const [requisitos, setRequisitos] = useReducer(accionesRequisitos, []);
 
+    const [patrocinadorInput, setPatrocinadorInput] = useState('');
+    const [patrocinadores, setPatrocinadores] = useReducer(accionesRequisitos, []);
+
     const handleRequisitoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setRequisitoInput(e.target.value);
+        const { name, value } = e.target;
+        if (name === 'requisitos') {
+            setRequisitoInput(value);
+        } else if (name === 'patrocinadores') {
+            setPatrocinadorInput(value);
+        }
     }
 
-    const handleAddRequisito = () => {
-        setRequisitos({
-            type: "Add",
-            payload: {
-                id: Date.now(),
-                requisito: requisitoInput
-            }
-        });
-        setRequisitoInput('');
+    const handleAddRequisito = (campo: 'requisitos' | 'patrocinadores') => {
+        const valor = campo.trim();
+
+        if (valor.length === 0) {
+            setErrores(prev => ({
+                ...prev,
+                [valor]: true
+            }));
+            return;
+        }
+
+        setErrores(prev => ({
+            ...prev,
+            [campo]: false
+        }));
+
+        if (campo === 'requisitos') {
+            setRequisitos({
+                type: "Add",
+                payload: {
+                    id: Date.now(),
+                    mensaje: requisitoInput
+                }
+            });
+
+            setRequisitoInput('');
+        } else if (campo === 'patrocinadores') {
+            setPatrocinadores({
+                type: "Add",
+                payload: {
+                    id: Date.now(),
+                    mensaje: patrocinadorInput
+                }
+            });
+
+            setPatrocinadorInput('');
+        }
     }
 
-    const handleDeleteRequisito = (id: number) => {
-        setRequisitos({ type: "Remove", payload: { id: id } });
+    const handleDeleteRequisito = (id: number, campo: 'requisitos' | 'patrocinadores') => {
+        if (campo === 'requisitos') {
+            setRequisitos({ type: "Remove", payload: { id: id } });
+        } else if (campo === 'patrocinadores') {
+            setPatrocinadores({ type: "Remove", payload: { id: id } });
+        }
     }
 
     //------------------------------------------------------------------------
@@ -84,11 +132,12 @@ export function TorneoRegistro({ url }: Url) {
     const [torneo, setTorneo] = useState<Torneo>({
         nombre: '',
         premio: '',
-        fechaInicio: '',
-        fechaFin: '',
+        fecha_Inicio: '',
+        fecha_Fin: '',
         localizacion: '',
         deporte: '',
-        requisitos: []
+        requisitos: [],
+        patrocinadores: []
     });
 
     const handleSelect = async () => {
@@ -118,16 +167,28 @@ export function TorneoRegistro({ url }: Url) {
     }
 
     useEffect(() => {
-        const requisitosFiltrados = requisitos.filter(r => r.requisito !== undefined).map(r => r.requisito as string);
-        setTorneo(prev => ({ ...prev, requisitos: requisitosFiltrados })); //Guardo los requisitos sin el ID, sólo el nombre
-    }, [requisitos]);
+        const requisitosFiltrados = requisitos.filter(r => r.mensaje !== undefined).map(r => r.mensaje as string);
+        const patrocinadoresFiltrados = patrocinadores.filter(r => r.mensaje !== undefined).map(r => r.mensaje as string);
+        setTorneo(prev => ({ ...prev, requisitos: requisitosFiltrados, patrocinadores: patrocinadoresFiltrados })); //Guardo los requisitos sin el ID, sólo el nombre
+    }, [requisitos, patrocinadores]);
 
     //-------------------------------------------------------------
 
+    const handleFetch = () => {
+        fetchData(url, "post", { body: torneo }, token);
+    }
+
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        console.log(torneo);
+        handleFetch();
     }
+
+    useEffect(() => {
+        if (data != null) {
+            setMensaje(data.message);
+            navegate('/panel/torneos');
+        }
+    }, [data]);
 
     return (
         <div>
@@ -172,11 +233,11 @@ export function TorneoRegistro({ url }: Url) {
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 lg:w-8/12">
                                 <div>
                                     <p className="text-sm text-black">Fecha de inicio</p>
-                                    <input type="date" name="fechaInicio" min={hoy} value={torneo.fechaInicio} onChange={handleChange} className="ps-1 bg-white border border-[#868686] rounded-sm w-10/12" />
+                                    <input type="date" name="fecha_Inicio" min={hoy} value={torneo.fecha_Inicio} onChange={handleChange} className="ps-1 bg-white border border-[#868686] rounded-sm w-10/12" />
                                 </div>
                                 <div>
                                     <p className="text-sm text-black">Fecha de finalización</p>
-                                    <input type="date" name="fechaFin" min={torneo.fechaInicio || hoy} value={torneo.fechaFin} onChange={handleChange} className="ps-1 bg-white border border-[#868686] rounded-sm w-10/12 lg:w-12/12" />
+                                    <input type="date" name="fecha_Fin" min={torneo.fecha_Inicio || hoy} value={torneo.fecha_Fin} onChange={handleChange} className="ps-1 bg-white border border-[#868686] rounded-sm w-10/12 lg:w-12/12" />
                                 </div>
                             </div>
                         </div>
@@ -220,20 +281,21 @@ export function TorneoRegistro({ url }: Url) {
                                 <div>
                                     <p className="text-sm text-black">Descripción</p>
                                     <div className="flex flex-wrap gap-2">
-                                        <input type="text" name="requisitos" required value={requisitoInput} onChange={handleRequisitoChange} className="ps-1 bg-white border border-[#868686] rounded-sm w-10/12 lg:w-8/12" />
-                                        <Boton icono="añadir" title="Añadir" type="button" name="requisitos" accion={handleAddRequisito} />
+                                        <input type="text" name="requisitos" value={requisitoInput} onChange={handleRequisitoChange} className="ps-1 bg-white border border-[#868686] rounded-sm w-10/12 lg:w-8/12" />
+                                        <Boton icono="añadir" title="Añadir" type="button" name="requisitos" accion={() => handleAddRequisito("requisitos")} />
+                                        {errores.requisitos && (<p className="text-red-500">Debes de añadir el requisito</p>)}
                                     </div>
                                 </div>
                                 {requisitos.length > 0 && (
-                                    requisitos.map((r: Requisitos, i: number) => {
+                                    requisitos.map((r: Datos, i: number) => {
                                         return (
                                             <div className="md:w-8/12" key={r.id}>
                                                 <div className="grid grid-cols-1 gap-2 bg-white p-3 rounded-md shadow-sm">
                                                     <p className="font-bold">Descripción - {i + 1}:</p>
                                                     <div className="md:flex items-center gap-4">
-                                                        <p className="break-all whitespace-normal">{r.requisito}</p>
+                                                        <p className="break-all whitespace-normal">{r.mensaje}</p>
                                                         <div className="flex flex-col mt-3 lg:mt-0 justify-center ml-auto">
-                                                            <Boton icono="quitar" title="Eliminar" type="button" accion={() => handleDeleteRequisito(r.id)} colores="bg-red-500 hover:bg-red-600 text-white" name="requisitos" />
+                                                            <Boton icono="quitar" title="Eliminar" type="button" accion={() => handleDeleteRequisito(r.id, "requisitos")} colores="bg-red-500 hover:bg-red-600 text-white" name="requisitos" />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -252,8 +314,29 @@ export function TorneoRegistro({ url }: Url) {
                                 </div>
                                 <div>
                                     <p className="text-sm text-black">Nombre</p>
-                                    <input type="text" className="ps-1 bg-white border border-[#868686] rounded-sm w-10/12 lg:w-8/12" />
+                                    <div className="flex flex-wrap gap-2">
+                                        <input type="text" name="patrocinadores" onChange={handleRequisitoChange} value={patrocinadorInput} className="ps-1 bg-white border border-[#868686] rounded-sm w-10/12 lg:w-8/12" />
+                                        <Boton icono="añadir" title="Añadir" type="button" name="patrocinadores" accion={() => handleAddRequisito("patrocinadores")} />
+                                        {errores.patrocinadores && (<p className="text-red-500">Debes de añadir el patrocinador</p>)}
+                                    </div>
                                 </div>
+                                {patrocinadores.length > 0 && (
+                                    patrocinadores.map((r: Datos, i: number) => {
+                                        return (
+                                            <div className="md:w-8/12" key={r.id}>
+                                                <div className="grid grid-cols-1 gap-2 bg-white p-3 rounded-md shadow-sm">
+                                                    <p className="font-bold">Patrocinador Nº{i + 1}:</p>
+                                                    <div className="md:flex items-center gap-4">
+                                                        <p className="break-all whitespace-normal">{r.mensaje}</p>
+                                                        <div className="flex flex-col mt-3 lg:mt-0 justify-center ml-auto">
+                                                            <Boton icono="quitar" title="Eliminar" type="button" accion={() => handleDeleteRequisito(r.id, "patrocinadores")} colores="bg-red-500 hover:bg-red-600 text-white" name="requisitos" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        )
+                                    })
+                                )}
                             </div>
                         )}
                     </div>

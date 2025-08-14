@@ -13,7 +13,7 @@ export function Torneos({ url }: Url) {
         $id: string,
         deporte: string
     }
-    
+
     interface Torneo {
         nombre: string,
         premio: string,
@@ -41,7 +41,7 @@ export function Torneos({ url }: Url) {
         organizador: Organizador
     }
 
-    const { token, rol } = useAuth();
+    const { token, rol, mensaje, setMensaje } = useAuth();
     const { data, loading, error, fetchData } = useFetch();
     const [pagina, setPagina] = useState<number>(1);
     const [visible, setVisible] = useState<boolean>(false);
@@ -123,6 +123,14 @@ export function Torneos({ url }: Url) {
         navegate(`/panel/torneos/registro`);
     }
 
+    useEffect(() => {
+        if (mensaje) {
+            setInterval(() => {
+                setMensaje(null);
+            }, 7000);
+        }
+    }, [mensaje]);
+
     return (
         <>
             {error ? (
@@ -137,6 +145,12 @@ export function Torneos({ url }: Url) {
                     <div className="w-12 h-12 border-4 border-white border-t-transparent rounded-full animate-spin"></div>
                 </div>
             ) : null}
+
+            {mensaje && (
+                <div className="bg-gradient-to-l from-lime-500 via-green-500 to-emerald-500 rounded-md p-2 mb-4">
+                    <p className="text-white">{mensaje}</p>
+                </div>
+            )}
 
             {data && (
                 <div>
