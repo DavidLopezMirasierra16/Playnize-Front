@@ -6,20 +6,21 @@ import { useNavigate } from "react-router-dom";
 import { Activo, Finalizado, NoEmpezado } from "../Estados";
 import { Boton } from "../../Componentes_Personalizados/BotonPrincipal";
 
-export interface Torneo {
-    nombre: string,
-    premio: string,
-    fechaInicio: string,
-    fechaFin: string,
-    localizacion: string,
-    deporte: string,
-}
 
 export function Torneos({ url }: Url) {
 
     interface Deporte {
         $id: string,
         deporte: string
+    }
+    
+    interface Torneo {
+        nombre: string,
+        premio: string,
+        fechaInicio: string,
+        fechaFin: string,
+        localizacion: string,
+        deporte: string,
     }
 
     interface Organizador {
@@ -153,7 +154,7 @@ export function Torneos({ url }: Url) {
                                 </button>
                             </div>
                             <div className={`mb-4`}>
-                                <Boton icono="registrar" mensaje="Registrar" accion={handleCreate} />
+                                <Boton icono="registrar" mensaje="Registrar" type="button" accion={handleCreate} />
                             </div>
                         </div>
 
