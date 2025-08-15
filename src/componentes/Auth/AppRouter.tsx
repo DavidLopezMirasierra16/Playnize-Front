@@ -25,6 +25,7 @@ import { UsuarioRegistro } from "../Paginas/Usuarios/UsuarioRegistro";
 import { Inicio } from "../Paginas/Inicio/Inicio";
 import { TorneoRegistro } from "../Paginas/Torneos/TorneoRegistro";
 import { TorneoDatos } from "../Paginas/Torneos/TorneoDatos";
+import { RolesRegistro } from "../Paginas/Roles/FormRegistrarRol";
 
 export function AppRouter() {
     function Layout() {

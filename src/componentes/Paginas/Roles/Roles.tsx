@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../../Auth/AuthContext"
 import { useFetch } from "../../Hooks_Personalizados/UseFetch";
-import { useNavigate } from "react-router-dom";
 import type { Url } from "../Deportes/Deportes";
+import { Boton } from "../../Componentes_Personalizados/BotonPrincipal";
+import { RegistrarRol } from "./FormRegistrarRol";
+import axios from "axios";
 
 export function Roles({ url }: Url) {
 
@@ -13,14 +15,19 @@ export function Roles({ url }: Url) {
         usuarios: string
     }
 
-    const { token } = useAuth();
+    const { token, mensaje, setMensaje } = useAuth();
     const { data, loading, error, fetchData } = useFetch();
     const [pagina, setPagina] = useState<number>(1);
-    const navegate = useNavigate();
+    const [visibleCrear, setVisibleCrear] = useState(false);
+    const [visibleEditar, setVisibleEditar] = useState(false);
+    const [rolEditar, setRolEditar] = useState({
+        id: 0,
+        rol: ''
+    });
 
     useEffect(() => {
         fetchData(url + `?page=${pagina}`, 'get', {}, token);
-    }, [url])
+    }, [url, visibleCrear, visibleEditar])
 
     const handleNextPagina = () => {
         setPagina((prevPag: number) => prevPag + 1);
@@ -30,9 +37,31 @@ export function Roles({ url }: Url) {
         setPagina((prevPagina: number) => prevPagina - 1);
     }
 
-    const handleRedirect = (id: number) => {
-        navegate(`/panel/deportes/${id}`)
+    const handleRedirect = async (id: number) => {
+        const datos = await axios.get(`http://localhost:5170/api/Roles/${id}`, {
+            headers: {
+                Authorization: token ? `Bearer ${token}` : token
+            }
+        });
+        setRolEditar(datos.data.rol);
+        setVisibleEditar(!visibleEditar);
     }
+
+    const handleVisibleCrear = () => {
+        setVisibleCrear(!visibleCrear);
+    }
+
+    const handleVisibleEditar = () => {
+        setVisibleEditar(!visibleEditar);
+    }
+
+    useEffect(() => {
+        if (mensaje) {
+            setInterval(() => {
+                setMensaje(null);
+            }, 7000);
+        }
+    }, [mensaje]);
 
     return (
         <>
@@ -49,10 +78,26 @@ export function Roles({ url }: Url) {
                 </div>
             ) : null}
 
+            {mensaje && (
+                <div className="bg-gradient-to-l from-lime-500 via-green-500 to-emerald-500 rounded-md p-2 mb-4">
+                    <p className="text-white">{mensaje}</p>
+                </div>
+            )}
+
             {data && (
                 <div>
                     <div className="bg-white p-3 rounded-md shadow-sm mb-4">
                         <p className="mb-4 font-bold text-lg">Roles</p>
+
+                        <div className={`mb-4`}>
+                            <Boton icono="registrar" mensaje="Registrar" name="crear" type="button" accion={handleVisibleCrear} />
+                        </div>
+
+                        {/* Formulario para crear */}
+                        {visibleCrear && <RegistrarRol visible={handleVisibleCrear} />}
+
+                        {/* Formulario para editar */}
+                        {visibleEditar && <RegistrarRol visible={handleVisibleEditar} datosEditar={rolEditar} id={rolEditar.id} />}
 
                         <div>
                             {data.datos.$values != 0 ? (
@@ -67,7 +112,7 @@ export function Roles({ url }: Url) {
                                                 <p className="text-sm text-gray-500">Nº de usuarios</p>
                                                 <p className="text-base font-medium text-gray-800 break-words truncate">{r.usuarios}</p>
                                             </div>
-                                            <div className="justify-center">
+                                            <div className="mt-2 lg:mt-0 justify-center">
                                                 <button title="Editar rol" onClick={() => handleRedirect(r.id)} className=" cursor-pointer bg-[#ff9900] p-1 rounded-sm text-white hover:bg-[#ffbc58]">
                                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-5">
                                                         <path d="M21.731 2.269a2.625 2.625 0 0 0-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 0 0 0-3.712ZM19.513 8.199l-3.712-3.712-8.4 8.4a5.25 5.25 0 0 0-1.32 2.214l-.8 2.685a.75.75 0 0 0 .933.933l2.685-.8a5.25 5.25 0 0 0 2.214-1.32l8.4-8.4Z" />

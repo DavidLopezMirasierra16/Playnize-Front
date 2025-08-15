@@ -6,7 +6,7 @@ import { useAuth } from "../Auth/AuthContext";
 export function EditarUser({ datos, visible, id, mensaje }: EditarDatos) {
 
     const { token } = useAuth();
-    const { data, error, fetchData } = useFetch();
+    const { data, loading, error, fetchData } = useFetch();
     const [newData, setNewData] = useState<FormEditar>({
         Nombre: datos.Nombre,
         Apellidos: datos.Apellidos,
@@ -42,11 +42,18 @@ export function EditarUser({ datos, visible, id, mensaje }: EditarDatos) {
             <div className="fixed inset-0 bg-gray-90 backdrop-blur-xs flex justify-center items-center z-50">
                 <div className="bg-gray-700 p-6 rounded-lg shadow-lg w-full max-w-md">
 
-                    {error && (
-                        <div className="bg-red-500 rounded-sm p-1 mb-2">
-                            <p className="text-center">{error}</p>
+                    {error ? (
+                        <div className="absolute inset-0 bg-gray-500 bg-opacity-30 flex justify-center items-center z-10">
+                            <div className="bg-white text-red-600 p-6 rounded-xl shadow-lg text-center w-full max-w-sm mx-auto">
+                                <p className="font-semibold text-lg">Error</p>
+                                <p className="mt-2">{error}</p>
+                            </div>
                         </div>
-                    )}
+                    ) : loading ? (
+                        <div className="absolute inset-0 bg-gray-500 bg-opacity-30 flex justify-center items-center z-10">
+                            <div className="w-12 h-12 border-4 border-white border-t-transparent rounded-full animate-spin"></div>
+                        </div>
+                    ) : null}
 
                     <h2 className="text-lg font-semibold mb-4">Editar información</h2>
                     <div className="grid grid-cols-1 gap-4 text-black">
