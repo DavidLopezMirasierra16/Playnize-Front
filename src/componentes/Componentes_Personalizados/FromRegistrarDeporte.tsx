@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import { Boton } from "./BotonPrincipal"
 import { useFetch } from "../Hooks_Personalizados/UseFetch"
 import { useAuth } from "../Auth/AuthContext"
-import type { Busqueda } from "../Paginas/Administrador/Deportes"
+import type { Busqueda } from "../Paginas/Deportes/Deportes"
 
 interface DatosDeporte {
     visible: () => void,

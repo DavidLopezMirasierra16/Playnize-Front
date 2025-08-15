@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useFetch } from "../Hooks_Personalizados/UseFetch";
 import { useAuth } from "../Auth/AuthContext";
-import { Activo, Finalizado, NoEmpezado } from "./Estados";
+import { Activo, Finalizado, NoEmpezado } from "../Componentes_Personalizados/Estados";
 import { useNavigate } from "react-router-dom";
 
 interface Equipo {

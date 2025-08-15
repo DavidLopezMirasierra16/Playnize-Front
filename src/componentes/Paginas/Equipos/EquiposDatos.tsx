@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useFetch } from "../../Hooks_Personalizados/UseFetch";
-import type { Url } from "../Administrador/Deportes";
+import type { Url } from "../Deportes/Deportes";
 import { useParams } from "react-router-dom";
 import { useAuth } from "../../Auth/AuthContext";
 

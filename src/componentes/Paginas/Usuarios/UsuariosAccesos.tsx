@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useFetch } from "../../Hooks_Personalizados/UseFetch"
 import { useAuth } from "../../Auth/AuthContext";
-import { Activo } from "../Estados";
-import type { Url } from "./Deportes";
+import { Activo } from "../../Componentes_Personalizados/Estados";
+import type { Url } from "../Deportes/Deportes";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import type { Url } from "../Administrador/Deportes";
+import type { Url } from "../Deportes/Deportes";
 import { useFetch } from "../../Hooks_Personalizados/UseFetch";
 import { useAuth } from "../../Auth/AuthContext";
 import { useNavigate } from "react-router-dom";

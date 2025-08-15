@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import type { EditarDatos, FormEditar } from "../Paginas/Administrador/UsuariosDatos";
+import type { EditarDatos, FormEditar } from "../Paginas/Usuarios/UsuariosDatos";
 import { useFetch } from "../Hooks_Personalizados/UseFetch";
 import { useAuth } from "../Auth/AuthContext";
 

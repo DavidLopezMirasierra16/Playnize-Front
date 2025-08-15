@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../../Auth/AuthContext";
 import { useFetch } from "../../Hooks_Personalizados/UseFetch";
-import type { Url } from "../Administrador/Deportes";
+import type { Url } from "../Deportes/Deportes";
 import { useNavigate } from "react-router-dom";
-import { Activo, Finalizado, NoEmpezado } from "../Estados";
+import { Activo, Finalizado, NoEmpezado } from "../../Componentes_Personalizados/Estados";
 import { Boton } from "../../Componentes_Personalizados/BotonPrincipal";
 
 

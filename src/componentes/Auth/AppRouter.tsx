@@ -1,28 +1,28 @@
 import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
 import { LayoutRegister } from "../Paginas/LayoutRegister";
-import { Header } from "../Paginas/Header";
-import { NotFound } from "../Paginas/NotFound";
+import { Header } from "../Componentes_Personalizados/Header";
+import { NotFound } from "../Componentes_Personalizados/NotFound";
 import { Login } from "./Login";
 import { Register } from "./Register";
 import PrivateRoute from "./PrivateRoute";
-import { AboutUs } from "../Paginas/AboutUs";
+import { AboutUs } from "../Paginas/Inicio/AboutUs";
 import { PanelSwitcher } from "../Paginas/Paneles/PanelSwitcher";
-import { Roles } from "../Paginas/Administrador/Roles";
+import { Roles } from "../Paginas/Roles/Roles";
 import { Perfil } from "../Paginas/Perfil";
-import { UsuariosListado } from "../Paginas/Administrador/Usuarios";
-import { UsuarioDetalle } from "../Paginas/Administrador/UsuariosDatos";
-import { UsuarioEditar } from "../Paginas/Administrador/UsuarioEditar";
-import { UsuariosAccesos } from "../Paginas/Administrador/UsuariosAccesos";
-import { Deportes } from "../Paginas/Administrador/Deportes";
+import { UsuariosListado } from "../Paginas/Usuarios/Usuarios";
+import { UsuarioDetalle } from "../Paginas/Usuarios/UsuariosDatos";
+import { UsuarioEditar } from "../Paginas/Usuarios/UsuarioEditar";
+import { UsuariosAccesos } from "../Paginas/Usuarios/UsuariosAccesos";
+import { Deportes } from "../Paginas/Deportes/Deportes";
 import { Prueba } from "../Paginas/Prueba";
 import { Torneos } from "../Paginas/Torneos/Torneos";
 import { Equipos } from "../Paginas/Equipos/Equipos";
-import { Footer } from "../Paginas/Footer";
+import { Footer } from "../Componentes_Personalizados/Footer";
 import { LegalFooter } from "../Componentes_Personalizados/LegalFooter";
 import { Cookies } from "../Componentes_Personalizados/Cookies";
 import { EquiposDatos } from "../Paginas/Equipos/EquiposDatos";
-import { UsuarioRegistro } from "../Paginas/Administrador/UsuarioRegistro";
-import { Inicio } from "../Paginas/Inicio";
+import { UsuarioRegistro } from "../Paginas/Usuarios/UsuarioRegistro";
+import { Inicio } from "../Paginas/Inicio/Inicio";
 import { TorneoRegistro } from "../Paginas/Torneos/TorneoRegistro";
 import { TorneoDatos } from "../Paginas/Torneos/TorneoDatos";
 
@@ -68,6 +68,8 @@ export function AppRouter() {
                                     </PrivateRoute>
                                 }
                             />
+
+                            {/* Roles */}
                             <Route
                                 path="roles"
                                 element={

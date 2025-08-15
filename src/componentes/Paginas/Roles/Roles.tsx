@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useAuth } from "../../Auth/AuthContext"
 import { useFetch } from "../../Hooks_Personalizados/UseFetch";
 import { useNavigate } from "react-router-dom";
-import type { Url } from "./Deportes";
+import type { Url } from "../Deportes/Deportes";
 
 export function Roles({ url }: Url) {
 

@@ -2,7 +2,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useAuth } from "../../Auth/AuthContext";
 import { useFetch } from "../../Hooks_Personalizados/UseFetch";
 import { useEffect, useState } from "react";
-import { Activo, Finalizado, NoEmpezado } from "../Estados";
+import { Activo, Finalizado, NoEmpezado } from "../../Componentes_Personalizados/Estados";
 import { EditarUser } from "../../Componentes_Personalizados/FormEditarUser";
 
 export interface EditarDatos {

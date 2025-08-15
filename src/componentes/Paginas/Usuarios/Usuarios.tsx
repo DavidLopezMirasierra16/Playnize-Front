@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useFetch } from "../../Hooks_Personalizados/UseFetch"
 import { useAuth } from "../../Auth/AuthContext";
 import { useLocation, useNavigate } from "react-router-dom";
-import type { Url } from "./Deportes";
+import type { Url } from "../Deportes/Deportes";
 
 /**
  * Listado con todos los usuarios, le pasamos la url de la petición y listo.

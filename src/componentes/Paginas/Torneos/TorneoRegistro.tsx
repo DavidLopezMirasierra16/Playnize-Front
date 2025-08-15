@@ -1,7 +1,7 @@
 import axios from "axios";
 import { Boton } from "../../Componentes_Personalizados/BotonPrincipal";
 import { useFetch } from "../../Hooks_Personalizados/UseFetch";
-import type { Url } from "../Administrador/Deportes";
+import type { Url } from "../Deportes/Deportes";
 import { useAuth } from "../../Auth/AuthContext";
 import { useEffect, useReducer, useState } from "react";
 import { useNavigate } from "react-router-dom";
