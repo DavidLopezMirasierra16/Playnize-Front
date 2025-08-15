@@ -1,5 +1,5 @@
 export function Prueba() {
     return (
-        <p>Prueba</p>
+        <p>prueba</p>
     )
 }

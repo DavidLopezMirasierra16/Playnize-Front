@@ -30,6 +30,22 @@ interface EquipoData {
     torneos: number
 }
 
+export const Info = ({ id, url }: { id: number, url: string }) => {
+    const navigate = useNavigate();
+
+    const handleInfo = () => {
+        navigate(url + id);
+    }
+
+    return (
+        <>
+            <svg onClick={handleInfo} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-4 ml-2 cursor-pointer">
+                <path strokeLinecap="round" strokeLinejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" />
+            </svg>
+        </>
+    )
+}
+
 export function Perfil() {
     const { data, loading, error, fetchData } = useFetch();
     const { token, rol } = useAuth();
@@ -37,22 +53,6 @@ export function Perfil() {
     useEffect(() => {
         fetchData(`http://localhost:5170/api/Usuario/Info`, 'get', {}, token)
     }, []);
-
-    const InfoTorneo = ({ id, url }: { id: number, url: string }) => {
-        const navigate = useNavigate();
-
-        const handleInfo = () => {
-            navigate(url + id);
-        }
-
-        return (
-            <>
-                <svg onClick={handleInfo} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-4 ml-2 cursor-pointer">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" />
-                </svg>
-            </>
-        )
-    }
 
     return (
         <>
@@ -107,7 +107,7 @@ export function Perfil() {
                                         <div key={t.id} className="mt-5">
                                             <div className="flex flex-wrap items-center mb-2">
                                                 <p className="text-lg">{t.nombre}</p>
-                                                <InfoTorneo id={t.id} url={`/panel/torneos/`} />
+                                                <Info id={t.id} url={`/panel/torneos/`} />
                                             </div>
                                             <div className="grid grid-cols-1 lg:grid-cols-2">
                                                 <div className="grid grid-cols-2">
@@ -167,7 +167,7 @@ export function Perfil() {
                                     <div key={e.$id} className={`mb-5 items-center ${i === data.user.equipos.$values.length - 1 ? '' : ' border-b-2 border-b-[#F3F4F6]'}`}>
                                         <div className="flex flex-wrap items-center mb-2">
                                             <p className="text-lg">{e.nombre}</p>
-                                            <InfoTorneo id={e.id} url={`/panel/equipos/`} />
+                                            <Info id={e.id} url={`/panel/equipos/`} />
                                         </div>
                                         <div className="grid grid-cols-1 lg:grid-cols-2">
                                             <div className="grid grid-cols-2">

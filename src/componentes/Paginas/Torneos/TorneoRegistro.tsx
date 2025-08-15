@@ -216,11 +216,11 @@ export function TorneoRegistro({ url }: Url) {
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 lg:w-8/12">
                                 <div>
                                     <p className="text-sm text-black">Nombre del torneo</p>
-                                    <input type="text" name="nombre" value={torneo.nombre} onChange={handleChange} className="ps-1 bg-white border border-[#868686] rounded-sm w-10/12" />
+                                    <input type="text" name="nombre" value={torneo.nombre} required onChange={handleChange} className="ps-1 bg-white border border-[#868686] rounded-sm w-10/12" />
                                 </div>
                                 <div>
                                     <p className="text-sm text-black">Localización</p>
-                                    <input type="text" name="localizacion" value={torneo.localizacion} onChange={handleChange} className="ps-1 bg-white border border-[#868686] rounded-sm w-10/12 lg:w-12/12" />
+                                    <input type="text" name="localizacion" value={torneo.localizacion} required onChange={handleChange} className="ps-1 bg-white border border-[#868686] rounded-sm w-10/12 lg:w-12/12" />
                                 </div>
                             </div>
                         </div>
@@ -233,11 +233,11 @@ export function TorneoRegistro({ url }: Url) {
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 lg:w-8/12">
                                 <div>
                                     <p className="text-sm text-black">Fecha de inicio</p>
-                                    <input type="date" name="fecha_Inicio" min={hoy} value={torneo.fecha_Inicio} onChange={handleChange} className="ps-1 bg-white border border-[#868686] rounded-sm w-10/12" />
+                                    <input type="date" name="fecha_Inicio" required min={hoy} value={torneo.fecha_Inicio} onChange={handleChange} className="ps-1 bg-white border border-[#868686] rounded-sm w-10/12" />
                                 </div>
                                 <div>
                                     <p className="text-sm text-black">Fecha de finalización</p>
-                                    <input type="date" name="fecha_Fin" min={torneo.fecha_Inicio || hoy} value={torneo.fecha_Fin} onChange={handleChange} className="ps-1 bg-white border border-[#868686] rounded-sm w-10/12 lg:w-12/12" />
+                                    <input type="date" name="fecha_Fin" required min={torneo.fecha_Inicio || hoy} value={torneo.fecha_Fin} onChange={handleChange} className="ps-1 bg-white border border-[#868686] rounded-sm w-10/12 lg:w-12/12" />
                                 </div>
                             </div>
                         </div>
@@ -254,7 +254,7 @@ export function TorneoRegistro({ url }: Url) {
                                 </div>
                                 <div>
                                     <p className="text-sm text-black">Deporte</p>
-                                    <select name="deporte" value={torneo.deporte} onChange={handleChange} className="bg-white border border-[#868686] rounded-sm w-10/12">
+                                    <select name="deporte" value={torneo.deporte} required onChange={handleChange} className="bg-white border border-[#868686] rounded-sm w-10/12">
                                         <option value="0">Selecciona una opcion</option>
                                         {deportes.map((deporte, i) => (
                                             <option key={i} value={deporte.id}>

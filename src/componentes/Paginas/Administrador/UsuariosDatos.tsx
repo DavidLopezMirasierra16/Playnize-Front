@@ -118,21 +118,21 @@ export function UsuarioDetalle() {
                                 <div className="grid grid-cols-2">
                                     <div className="flex flex-col gap-1">
                                         <p className="text-sm text-gray-500">Nombre</p>
-                                        <p className="text-base font-medium text-gray-800 break-words truncate">{data.user.nombre}</p>
+                                        <p className="text-base font-medium text-gray-800 break-words">{data.user.nombre}</p>
                                     </div>
                                     <div className="flex flex-col gap-1">
                                         <p className="text-sm text-gray-500">Apellidos</p>
-                                        <p className="text-base font-medium text-gray-800 break-words truncate">{data.user.apellidos}</p>
+                                        <p className="text-base font-medium text-gray-800 break-words">{data.user.apellidos}</p>
                                     </div>
                                 </div>
                                 <div className="mt-3 grid grid-cols-2 lg:mt-0">
                                     <div className="flex flex-col gap-1">
                                         <p className="text-sm text-gray-500">Email</p>
-                                        <p className="text-base font-medium text-gray-800 break-words truncate">{data.user.email}</p>
+                                        <p className="text-base font-medium text-gray-800 break-words">{data.user.email}</p>
                                     </div>
                                     <div className="flex flex-col gap-1">
                                         <p className="text-sm text-gray-500">Teléfono</p>
-                                        <p className="text-base font-medium text-gray-800 break-words truncate">{data.user.telefono}</p>
+                                        <p className="text-base font-medium text-gray-800 break-words">{data.user.telefono}</p>
                                     </div>
                                 </div>
                                 <div className="mt-3 lg:mt-0 flex items-center">
@@ -163,15 +163,15 @@ export function UsuarioDetalle() {
                                         <div key={s.$id} className="grid grid-cols-3">
                                             <div className="flex flex-col gap-1">
                                                 <p className="text-sm text-gray-500">Primer inicio de sesión</p>
-                                                <p className="text-base font-medium text-gray-800 break-words truncate">{fecha}</p>
+                                                <p className="text-base font-medium text-gray-800 break-words">{fecha}</p>
                                             </div>
                                             <div className="flex flex-col gap-1">
                                                 <p className="text-sm text-gray-500">Hora inicio de sesión</p>
-                                                <p className="text-base font-medium text-gray-800 break-words truncate">{hora}</p>
+                                                <p className="text-base font-medium text-gray-800 break-words">{hora}</p>
                                             </div>
                                             <div className="flex flex-col gap-1">
                                                 <p className="text-sm text-gray-500">Estado de la sesión</p>
-                                                <p className="text-base font-medium text-gray-800 break-words truncate">{s.activo == true ? "Activa" : "No activa"}</p>
+                                                <p className="text-base font-medium text-gray-800 break-words">{s.activo == true ? "Activa" : "No activa"}</p>
                                             </div>
                                         </div>
                                     )
@@ -179,7 +179,7 @@ export function UsuarioDetalle() {
                             ) : (
                                 <div className="flex flex-col gap-1">
                                     <p className="text-sm text-gray-500">Primer inicio de sesión</p>
-                                    <p className="text-base font-medium text-gray-800 break-words truncate">Todavía no ha iniciado sesion</p>
+                                    <p className="text-base font-medium text-gray-800 break-words">Todavía no ha iniciado sesion</p>
                                 </div>
                             )
                             }
@@ -189,7 +189,7 @@ export function UsuarioDetalle() {
                                     return (
                                         <div key={r.$id} className="mt-2 flex flex-col gap-1 lg:mt-0">
                                             <p className="text-sm text-gray-500">Permiso</p>
-                                            <p className="text-base font-medium text-gray-800 break-words truncate">{r.rol}</p>
+                                            <p className="text-base font-medium text-gray-800 break-words">{r.rol}</p>
                                         </div>
                                     )
                                 })

@@ -76,8 +76,6 @@ export function UsuariosAccesos({ url }: Url) {
                     <div className="bg-white p-3 rounded-md shadow-sm mb-4">
                         <p className="mb-4 font-bold text-lg">Usuarios conectados</p>
 
-                        {/* Aquí irán los filtros */}
-
                         <div>
                             {data.datos.$values != 0 ? (
                                 data.datos.$values.map((u: User, i: number) => {
