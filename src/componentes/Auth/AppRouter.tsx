@@ -8,13 +8,12 @@ import PrivateRoute from "./PrivateRoute";
 import { AboutUs } from "../Paginas/Inicio/AboutUs";
 import { PanelSwitcher } from "../Paginas/Paneles/PanelSwitcher";
 import { Roles } from "../Paginas/Roles/Roles";
-import { Perfil } from "../Paginas/Perfil";
+import { Perfil } from "../Paginas/Perfil/Perfil";
 import { UsuariosListado } from "../Paginas/Usuarios/Usuarios";
 import { UsuarioDetalle } from "../Paginas/Usuarios/UsuariosDatos";
 import { UsuarioEditar } from "../Paginas/Usuarios/UsuarioEditar";
 import { UsuariosAccesos } from "../Paginas/Usuarios/UsuariosAccesos";
 import { Deportes } from "../Paginas/Deportes/Deportes";
-import { Prueba } from "../Paginas/Prueba";
 import { Torneos } from "../Paginas/Torneos/Torneos";
 import { Equipos } from "../Paginas/Equipos/Equipos";
 import { Footer } from "../Componentes_Personalizados/Footer";
@@ -25,7 +24,6 @@ import { UsuarioRegistro } from "../Paginas/Usuarios/UsuarioRegistro";
 import { Inicio } from "../Paginas/Inicio/Inicio";
 import { TorneoRegistro } from "../Paginas/Torneos/TorneoRegistro";
 import { TorneoDatos } from "../Paginas/Torneos/TorneoDatos";
-import { RolesRegistro } from "../Paginas/Roles/FormRegistrarRol";
 
 export function AppRouter() {
     function Layout() {
@@ -76,14 +74,6 @@ export function AppRouter() {
                                 element={
                                     <PrivateRoute requiredRole={[1]}>
                                         <Roles url={`http://localhost:5170/api/Roles`} />
-                                    </PrivateRoute>
-                                }
-                            />
-                            <Route
-                                path="roles/:id"
-                                element={
-                                    <PrivateRoute requiredRole={[1]}>
-                                        <Prueba />
                                     </PrivateRoute>
                                 }
                             />

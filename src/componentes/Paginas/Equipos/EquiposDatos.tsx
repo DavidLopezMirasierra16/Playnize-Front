@@ -4,7 +4,7 @@ import type { Url } from "../Deportes/Deportes";
 import { useParams } from "react-router-dom";
 import { useAuth } from "../../Auth/AuthContext";
 import { Activo } from "../../Componentes_Personalizados/Estados";
-import { Info } from "../Perfil";
+import { Info } from "../Perfil/Perfil";
 
 export function EquiposDatos({ url }: Url) {
 
@@ -77,7 +77,7 @@ export function EquiposDatos({ url }: Url) {
                                     </div>
                                 )
                             })
-                        ) : <p>No tiene nungún participante registrado</p>}
+                        ) : <p>No tiene ningún participante registrado</p>}
                     </div>
 
                     {/* Torneos */}

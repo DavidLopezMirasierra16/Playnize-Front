@@ -3,7 +3,7 @@ import { useFetch } from "../../Hooks_Personalizados/UseFetch";
 import type { Url } from "../Deportes/Deportes";
 import { useEffect } from "react";
 import { useAuth } from "../../Auth/AuthContext";
-import { Info } from "../Perfil";
+import { Info } from "../Perfil/Perfil";
 
 export function TorneoDatos({ url }: Url) {
 
