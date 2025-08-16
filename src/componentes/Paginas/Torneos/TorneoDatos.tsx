@@ -15,6 +15,20 @@ export function TorneoDatos({ url }: Url) {
         fetchData(url + `${id}`, "get", {}, token);
     }, []);
 
+    const FormatoPremio = (precio: string) => {
+        //Intentamos convertir el valor a un número.
+        const numericValue = Number(precio);
+
+        if (!isNaN(numericValue) && precio !== null && precio !== '') {
+            return new Intl.NumberFormat('es-ES', {
+                style: 'currency',
+                currency: 'EUR'
+            }).format(numericValue);
+        } else {
+            return precio; //Si no es un numero, lo devolvemos tal cuál
+        }
+    }
+
     return (
         <>
             {error ? (
@@ -44,7 +58,7 @@ export function TorneoDatos({ url }: Url) {
                                 </div>
                                 <div className="flex flex-col gap-1">
                                     <p className="text-sm text-gray-500">Premio</p>
-                                    <p className="text-base font-medium text-gray-800 break-words">{data.torneo.premio}</p>
+                                    <p className="text-base font-medium text-gray-800 break-words">{FormatoPremio(data.torneo.premio)}</p>
                                 </div>
                             </div>
                             <div className="mt-3 grid grid-cols-2 lg:mt-0">
