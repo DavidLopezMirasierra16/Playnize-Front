@@ -91,7 +91,7 @@ export function UsuariosAccesos({ url }: Url) {
                                             </div>
                                             <div>
                                                 <p className="text-sm text-gray-500 mt-3 md:mt-0">Sesión</p>
-                                                <Activo />
+                                                <Activo mensaje="En curso" />
                                             </div>
                                             <div className="mb-2 flex flex-wrap lg:items-center lg:justify-center mt-2 lg:mt-0 lg:mb-0">
                                                 <button onClick={() => handleData(u.idUsuario)} title="Detalles del usuario" className="cursor-pointer bg-blue-500 hover:bg-blue-600 text-white p-1 rounded-sm">

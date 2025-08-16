@@ -127,8 +127,8 @@ export function TorneoDatos({ url }: Url) {
                         {data.torneo.torneo_equipos.$values.length > 0 ? (
                             data.torneo.torneo_equipos.$values.map((et: any, i: number) => {
                                 return (
-                                    <div key={i} className="mt-6">
-                                        <div className="flex flex-wrap items-center mb-2">
+                                    <div key={i} className={`mt-6 ${i === et.participantes.$values.length - 1 ? '' : ' border-b-2 border-b-[#F3F4F6]'}`}>
+                                        <div className={`flex flex-wrap items-center mb-2`}>
                                             <p className="text-lg">{et.nombre}</p>
                                             <Info id={et.id} url={`/panel/equipos/`} />
                                         </div>
@@ -136,7 +136,7 @@ export function TorneoDatos({ url }: Url) {
                                         {et.participantes.$values.length > 0 ? (
                                             et.participantes.$values.map((p: any, i: number) => {
                                                 return (
-                                                    <div className={`mb-5 items-center grid grid-cols-1 lg:grid-cols-[1fr_3fr] ${i === et.participantes.$values.length - 1 ? '' : ' border-b-2 border-b-[#F3F4F6]'}`} key={i}>
+                                                    <div className={`mb-5 items-center grid grid-cols-1 lg:grid-cols-[1fr_3fr]`} key={i}>
                                                         <div>
                                                             <div className="flex flex-col gap-1">
                                                                 <p className="text-sm text-gray-500">Participante</p>
@@ -156,7 +156,7 @@ export function TorneoDatos({ url }: Url) {
                                                     </div>
                                                 )
                                             })
-                                        ) : <p className="font-bold">No tiene ningún participante</p>}
+                                        ) : <p className="font-bold mb-5">No tiene ningún participante</p>}
 
                                     </div>
                                 )

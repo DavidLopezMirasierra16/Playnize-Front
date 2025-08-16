@@ -245,11 +245,11 @@ export function Torneos({ url }: Url) {
                                                     const fin = new Date(t.fechaFin);
 
                                                     if (hoy < inicio) {
-                                                        return <NoEmpezado />;
+                                                        return <NoEmpezado mensaje="No empezado" />;
                                                     } else if (hoy >= inicio && hoy <= fin) {
-                                                        return <Activo />;
+                                                        return <Activo mensaje="En curso" />;
                                                     } else {
-                                                        return <Finalizado />;
+                                                        return <Finalizado mensaje="Finalizado" />;
                                                     }
                                                 })()}
                                             </div>
