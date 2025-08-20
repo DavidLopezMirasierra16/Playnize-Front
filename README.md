@@ -1,69 +1,39 @@
-# React + TypeScript + Vite
+# Playnize
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**Playnize** es una aplicación web diseñada para ayudar a los usuarios a organizar y participar en eventos deportivos de manera sencilla. Conecta jugadores, equipos y aficionados al deporte, facilitando la gestión de eventos.
 
-Currently, two official plugins are available:
+## Tecnologías utilizadas
+- **Frontend:** React, TypeScript, Tailwind CSS
+- **Backend:** ASP.NET Web API, C#
+- **Base de datos:** SQL Server
+- **Autenticación:** JWT (JSON Web Token)
+- **API:** Endpoints REST para gestión de eventos y usuarios
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Funcionalidades
+- Crear, editar y gestionar eventos deportivos
+- Registro y autenticación de usuarios
+- Gestión de participación (unirse/salir de eventos)
+- Búsqueda y filtrado de eventos
+- Panel de administración para gestionar eventos y usuarios
 
-## Expanding the ESLint configuration
+## Mi rol
+- Desarrollo de **funcionalidades tanto en frontend como en backend**
+- Implementación de **endpoints de API en ASP.NET Web API** y conexión con el frontend en React
+- Estilizado de la aplicación con **Tailwind CSS**
+- Integración de **autenticación y autorización** mediante JWT
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Notas
+- Se ha eliminado o reemplazado cualquier dato sensible (claves, contraseñas, etc.).
+- Este repositorio se comparte con fines de demostración de mis habilidades y experiencia en proyectos.
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## Demo / Capturas
+*[Imágenes](https://www.linkedin.com/posts/david-l%C3%B3pez-mirasierra-680b4a343_avanzando-con-playnize-estoy-desarrollando-activity-7362610929299038208-oUB4?utm_source=share&utm_medium=member_desktop&rcm=ACoAAFYh_0ABY2GDyBJP9Xne9_e9Te4TB0f5Br0)*
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+## Cómo ejecutar localmente
+1. Clonar el repositorio
+2. Instalar dependencias del backend usando Visual Studio o .NET CLI
+3. Instalar dependencias del frontend: `npm install`
+4. Configurar `appsettings.json` con tu base de datos SQL Server local
+5. Ejecutar backend: `dotnet run` o desde Visual Studio
+6. Ejecutar frontend: `npm run dev`
+7. Abrir el navegador en `http://localhost:3000`
