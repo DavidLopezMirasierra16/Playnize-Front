@@ -97,11 +97,11 @@ export function EquiposDatos({ url }: Url) {
                                             <p className="text-lg">{t.nombre}</p>
                                             <Info id={t.idTorneo} url={`/panel/torneos/`} />
                                         </div>
-
+                                        <p className="text-lg mt-3">Partidos</p>
                                         {partidos.length > 0 ? (
                                             partidos.map((p: any, i: any) => {
                                                 return (
-                                                    <div key={i} className={`mt-4 ${i === t.partidos.$values.length - 1 ? '' : ' border-b-2 border-b-[#F3F4F6]'}`}>
+                                                    <div key={i} className={`mt-3 ${i === t.partidos.$values.length - 1 ? '' : ' border-b-2 border-b-[#F3F4F6]'}`}>
                                                         <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr]">
                                                             <div className="grid grid-cols-3">
                                                                 <div className="flex flex-col">

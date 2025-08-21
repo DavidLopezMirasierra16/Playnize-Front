@@ -1,19 +1,25 @@
 import { useParams } from "react-router-dom";
 import { useFetch } from "../../Hooks_Personalizados/UseFetch";
 import type { Url } from "../Deportes/Deportes";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useAuth } from "../../Auth/AuthContext";
 import { Info } from "../Perfil/Perfil";
+import { Boton } from "../../Componentes_Personalizados/BotonPrincipal";
 
 export function TorneoDatos({ url }: Url) {
 
     const { id } = useParams();
-    const { token } = useAuth();
+    const { token, rol } = useAuth();
     const { data, loading, error, fetchData } = useFetch();
+    const [visible, setVisible] = useState({
+        requisitos: false,
+        patrocinadores: false,
+        partido: false
+    });
 
     useEffect(() => {
         fetchData(url + `${id}`, "get", {}, token);
-    }, []);
+    }, [visible]);
 
     const FormatoPremio = (precio: string) => {
         //Intentamos convertir el valor a un número.
@@ -25,8 +31,18 @@ export function TorneoDatos({ url }: Url) {
                 currency: 'EUR'
             }).format(numericValue);
         } else {
-            return precio; //Si no es un numero, lo devolvemos tal cuál
+            return precio; //Si no es un numero, lo devolvemos
         }
+    }
+
+    const handleVisible = (e: React.MouseEvent<HTMLButtonElement>) => {
+        const name = e.currentTarget.name;
+        setVisible(prev => ({
+            //keyof typeof prev -> significa “todas las claves posibles de prev = "requisitos" | "patrocinadores" | "equipos"
+            //Usa el valor de la variable name como la clave de este objeto, name es una de las claves de prev
+            //TypeScript se quejaría de que name podría ser cualquier string, y no necesariamente una de las claves del estado.
+            ...prev, [name]: !prev[name as keyof typeof prev]
+        }));
     }
 
     return (
@@ -100,7 +116,14 @@ export function TorneoDatos({ url }: Url) {
 
                     {/* Requisitos */}
                     <div className="bg-white p-3 rounded-md shadow-sm mb-4">
-                        <p className="mb-4 font-bold text-lg">Requisitos</p>
+                        <div className="flex flex-col mb-4">
+                            <p className="mb-1 font-bold text-lg">Requisitos</p>
+                            {rol != 3 && (
+                                <div>
+                                    <Boton mensaje="Agregar requisitos" name="requisitos" accion={handleVisible} />
+                                </div>
+                            )}
+                        </div>
 
                         {data.torneo.requisitos.$values.length > 0 ? (
                             data.torneo.requisitos.$values.map((r: any, i: number) => {
@@ -118,7 +141,14 @@ export function TorneoDatos({ url }: Url) {
 
                     {/* Patrocinadores */}
                     <div className="bg-white p-3 rounded-md shadow-sm mb-4">
-                        <p className="mb-4 font-bold text-lg">Patrocinadores</p>
+                        <div className="flex flex-col mb-4">
+                            <p className="mb-1 font-bold text-lg">Patrocinadores</p>
+                            {rol != 3 && (
+                                <div>
+                                    <Boton mensaje="Agregar patrocinador" name="patrocinadores" accion={handleVisible} />
+                                </div>
+                            )}
+                        </div>
 
                         {data.torneo.patrocinadores.$values.length > 0 ? (
                             data.torneo.patrocinadores.$values.map((p: any, i: number) => {
@@ -179,6 +209,37 @@ export function TorneoDatos({ url }: Url) {
 
                     </div>
 
+                    {/* Partidos */}
+                    <div className="bg-white p-3 rounded-md shadow-sm mb-4">
+                        <div className="flex flex-col mb-4">
+                            <p className="mb-1 font-bold text-lg">Partidos</p>
+                            {rol != 3 && (
+                                <div>
+                                    <Boton mensaje="Asignar partido" name="partido" accion={handleVisible} />
+                                </div>
+                            )}
+                        </div>
+
+                        <div className="flex flex-wrap gap-7 ">
+                            {data.torneo.partidos.$values.length > 0 ? (
+                                data.torneo.partidos.$values.map((p: any, i: number) => {
+                                    return (
+                                        <div key={i} className="m-auto rounded-md shadow-sm p-4 bg-gradient-to-b from-gray-700 via-blue-800 to-gray-700 text-white hover:scale-[1.03] transition-transform duration-300">
+                                            <div className="flex flex-wrap gap-3">
+                                                <p>{p.local}</p>
+                                                <p>-</p>
+                                                <p>{p.visitante}</p>
+                                            </div>
+                                            <div className="text-center mt-3">
+                                                <p className="text-lg">{p.resultado_partido != null ? p.resultado_partido.resultado : "Por jugar"}</p>
+                                            </div>
+                                        </div>
+                                    )
+                                })
+                            ) : <p>No hay ningún partido registrado</p>}
+                        </div>
+
+                    </div>
 
                 </div>
             )}
