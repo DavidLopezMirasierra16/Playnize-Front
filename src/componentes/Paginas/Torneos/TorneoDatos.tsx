@@ -1,16 +1,18 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useFetch } from "../../Hooks_Personalizados/UseFetch";
 import type { Url } from "../Deportes/Deportes";
 import { useEffect, useState } from "react";
 import { useAuth } from "../../Auth/AuthContext";
 import { Info } from "../Perfil/Perfil";
 import { Boton } from "../../Componentes_Personalizados/BotonPrincipal";
+import { FormRegistro } from "../../Componentes_Personalizados/FormRegistro";
 
 export function TorneoDatos({ url }: Url) {
 
     const { id } = useParams();
-    const { token, rol } = useAuth();
+    const { token, rol, mensaje, setMensaje } = useAuth();
     const { data, loading, error, fetchData } = useFetch();
+    const navegate = useNavigate();
     const [visible, setVisible] = useState({
         requisitos: false,
         patrocinadores: false,
@@ -35,8 +37,17 @@ export function TorneoDatos({ url }: Url) {
         }
     }
 
-    const handleVisible = (e: React.MouseEvent<HTMLButtonElement>) => {
-        const name = e.currentTarget.name;
+    const handleVisible = (e?: React.MouseEvent<HTMLButtonElement> | string) => {
+        if (!e) return;
+        let name: string;
+
+        if (typeof e === "string") {
+            name = e;
+        } else if (e) {
+            name = e.currentTarget.name;
+        } else {
+            return;
+        }
         setVisible(prev => ({
             //keyof typeof prev -> significa “todas las claves posibles de prev = "requisitos" | "patrocinadores" | "equipos"
             //Usa el valor de la variable name como la clave de este objeto, name es una de las claves de prev
@@ -44,6 +55,18 @@ export function TorneoDatos({ url }: Url) {
             ...prev, [name]: !prev[name as keyof typeof prev]
         }));
     }
+
+    const handleRedirect = (id: number) => {
+        navegate(`/panel/equipos/torneo/${id}`)
+    }
+
+    useEffect(() => {
+        if (mensaje) {
+            setInterval(() => {
+                setMensaje(null);
+            }, 7000);
+        }
+    }, [mensaje]);
 
     return (
         <>
@@ -59,6 +82,12 @@ export function TorneoDatos({ url }: Url) {
                     <div className="w-12 h-12 border-4 border-white border-t-transparent rounded-full animate-spin"></div>
                 </div>
             ) : null}
+
+            {mensaje && (
+                <div className="bg-gradient-to-l from-lime-500 via-green-500 to-emerald-500 rounded-md p-2 mb-4">
+                    <p className="text-white">{mensaje}</p>
+                </div>
+            )}
 
             {data && (
                 <div>
@@ -125,10 +154,13 @@ export function TorneoDatos({ url }: Url) {
                             )}
                         </div>
 
+                        {visible.requisitos && <FormRegistro name="requisitos" mensaje="requisitos" visible={handleVisible} id={data.torneo.id}
+                            url="http://localhost:5170/api/Requisitos" />}
+
                         {data.torneo.requisitos.$values.length > 0 ? (
                             data.torneo.requisitos.$values.map((r: any, i: number) => {
                                 return (
-                                    <div key={i} className="mt-3">
+                                    <div key={r.id} className="mt-3">
                                         <p className=" break-all max-w-full md:max-w-[100%] overflow-hidden">
                                             {i + 1}.- {r.descripcion}
                                         </p>
@@ -150,6 +182,9 @@ export function TorneoDatos({ url }: Url) {
                             )}
                         </div>
 
+                        {visible.patrocinadores && <FormRegistro name="patrocinadores" mensaje="patrocinadores" visible={handleVisible} id={data.torneo.id}
+                            url="http://localhost:5170/api/Patrocinadores" />}
+
                         {data.torneo.patrocinadores.$values.length > 0 ? (
                             data.torneo.patrocinadores.$values.map((p: any, i: number) => {
                                 return (
@@ -162,6 +197,20 @@ export function TorneoDatos({ url }: Url) {
                             })
                         ) : <p>No hay ningún patrocinador registrado</p>}
 
+                    </div>
+
+                    {/* Partidos */}
+                    <div className="bg-white p-3 rounded-md shadow-sm mb-4">
+                        <div className="flex flex-col">
+                            <p className="mb-1 font-bold text-lg">Partidos</p>
+                            <div className="flex flex-wrap gap-2 items-center">
+                                <p>Consulta todos los partidos de este torneo</p>
+                                <svg onClick={() => handleRedirect(data.torneo.id)} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-5 cursor-pointer">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
+                                </svg>
+                            </div>
+
+                        </div>
                     </div>
 
                     {/* Equipos */}
@@ -206,38 +255,6 @@ export function TorneoDatos({ url }: Url) {
                                 )
                             })
                         ) : <p>No hay ningún equipo registrado</p>}
-
-                    </div>
-
-                    {/* Partidos */}
-                    <div className="bg-white p-3 rounded-md shadow-sm mb-4">
-                        <div className="flex flex-col mb-4">
-                            <p className="mb-1 font-bold text-lg">Partidos</p>
-                            {rol != 3 && (
-                                <div>
-                                    <Boton mensaje="Asignar partido" name="partido" accion={handleVisible} />
-                                </div>
-                            )}
-                        </div>
-
-                        <div className="flex flex-wrap gap-7 ">
-                            {data.torneo.partidos.$values.length > 0 ? (
-                                data.torneo.partidos.$values.map((p: any, i: number) => {
-                                    return (
-                                        <div key={i} className="m-auto rounded-md shadow-sm p-4 bg-gradient-to-b from-gray-700 via-blue-800 to-gray-700 text-white hover:scale-[1.03] transition-transform duration-300">
-                                            <div className="flex flex-wrap gap-3">
-                                                <p>{p.local}</p>
-                                                <p>-</p>
-                                                <p>{p.visitante}</p>
-                                            </div>
-                                            <div className="text-center mt-3">
-                                                <p className="text-lg">{p.resultado_partido != null ? p.resultado_partido.resultado : "Por jugar"}</p>
-                                            </div>
-                                        </div>
-                                    )
-                                })
-                            ) : <p>No hay ningún partido registrado</p>}
-                        </div>
 
                     </div>
 
