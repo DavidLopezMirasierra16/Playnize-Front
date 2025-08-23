@@ -57,7 +57,7 @@ export function TorneoDatos({ url }: Url) {
     }
 
     const handleRedirect = (id: number) => {
-        navegate(`/panel/equipos/torneo/${id}`)
+        navegate(`/panel/torneo/partidos/${id}`)
     }
 
     useEffect(() => {
