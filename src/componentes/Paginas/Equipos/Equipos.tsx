@@ -194,7 +194,7 @@ export function Equipos({ url }: Url) {
                             <div className="flex flex-wrap items-center">
                                 <button className={`cursor-pointer bg-[#1E2939] p-1 rounded-sm text-white me-2 hover:bg-[#374151] ${data.currentPage === data.totalPages ? 'hidden' : ''}`} onClick={handleNextPagina}>Siguiente</button>
                                 <button className={`cursor-pointer bg-[#1E2939] p-1 rounded-sm text-white me-2 hover:bg-[#374151] ${data.currentPage === 1 ? 'hidden' : ''}`} onClick={hangleBackPagina}>Atrás</button>
-                                <p>{data.currentItems} torneos de {data.totalItems}</p>
+                                <p>{data.currentItems} equipos de {data.totalItems}</p>
                             </div>
                         )}
                     </div>
