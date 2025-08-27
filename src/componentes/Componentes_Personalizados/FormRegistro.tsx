@@ -57,11 +57,8 @@ export function FormRegistro({ name, mensaje, visible, url, datosEditar, id }: R
                     <div className="bg-gray-700 p-6 rounded-lg shadow-lg w-full max-w-md">
 
                         {error ? (
-                            <div className="absolute inset-0 bg-gray-500 bg-opacity-30 flex justify-center items-center z-10">
-                                <div className="bg-white text-red-600 p-6 rounded-xl shadow-lg text-center w-full max-w-sm mx-auto">
-                                    <p className="font-semibold text-lg">Error</p>
-                                    <p className="mt-2">{error}</p>
-                                </div>
+                            <div className="bg-linear-to-r from-rose-500 via-pink-500 to-red-500 rounded-md p-2 mb-4">
+                                <p className="text-white">{error}</p>
                             </div>
                         ) : loading ? (
                             <div className="absolute inset-0 bg-gray-500 bg-opacity-30 flex justify-center items-center z-10">

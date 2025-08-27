@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { useAuth } from "../../Auth/AuthContext";
 import { Boton } from "../../Componentes_Personalizados/BotonPrincipal";
 import axios from "axios";
+import { FormRegistroPartido } from "./FormRegistroPartido";
 
 export function TorneoPartidos({ url }: Url) {
 
@@ -37,15 +38,16 @@ export function TorneoPartidos({ url }: Url) {
     const [pagina, setPagina] = useState<number>(1);
 
     const [filtros, setFiltros] = useState({
-        equipo: ''
-    })
+        equipo: '',
+        fecha: ''
+    });
 
     useEffect(() => {
         const params = new URLSearchParams();
         params.append('page', pagina.toString());
 
         if (filtros.equipo?.trim()) params.append('equipo', filtros.equipo.trim());
-
+        if (filtros.fecha?.trim()) params.append('fecha', filtros.fecha.trim());
 
         const fetchEquipos = async () => {
             try {
@@ -64,23 +66,19 @@ export function TorneoPartidos({ url }: Url) {
         fetchData(url + `/${id}` + `?${params.toString()}`, "get", {}, token);
         fetchEquipos();
 
-    }, []);
-
+    }, [filtros]);
 
     useEffect(() => {
         if (data) {
-            const equipos = data.datos?.$values?.[0].equipo_resultados.$values.length > 0 ? data.datos?.$values?.[0].equipo_resultados.$values : []
-            const noequipos = data.datos?.$values?.[0].noequipo_resultados.$values.length > 0 ? data.datos?.$values?.[0].noequipo_resultados.$values : []
-
-            let datosPartidos: any[] = [];
-            if (equipos.length > 0) {
-                datosPartidos = equipos;
-            } else if (noequipos.length > 0) {
-                datosPartidos = noequipos;
+            //Ambos comparten estructura, si hay uno no hay otro
+            const torneo = data.datos?.$values?.[0];
+            if (torneo != null) {
+                const partidos =
+                    torneo.equipo_resultados?.$values?.length > 0
+                        ? torneo.equipo_resultados.$values
+                        : torneo.noequipo_resultados?.$values ?? [];
+                setPartidos(partidos);
             }
-
-            setPartidos(datosPartidos);
-            console.log(data);
         }
     }, [data])
 
@@ -104,7 +102,7 @@ export function TorneoPartidos({ url }: Url) {
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-
+        console.log(filtros.fecha)
     }
 
     // const handleNextPagina = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -112,10 +110,6 @@ export function TorneoPartidos({ url }: Url) {
 
 
     // }
-
-    useEffect(() => {
-        if (data) console.log(data.datos.$values)
-    }, [data])
 
     return (
         <>
@@ -132,25 +126,42 @@ export function TorneoPartidos({ url }: Url) {
                 </div>
             ) : null}
 
-            {data && (
+            {data && partidos && (
                 <div>
                     <div className="bg-white p-3 rounded-md shadow-sm mb-4">
-                        {/* <p className="mb-4 font-bold text-lg">Partidos del torneo: {data.datos.$values?.[0].nombre}</p> */}
+                        {data.datos.$values.length > 0 ? (
+                            <div className="flex flex-wrap gap-1">
+                                <p className="mb-4 font-bold text-lg">Partidos del torneo:</p>
+                                {data.datos.$values.map((p: any, i: number) => (
+                                    <p key={i} className="mb-4 font-bold text-lg">{p.nombre}</p>
+                                ))}
+
+                            </div>
+
+                        ) : (
+                            <p className="mb-4 font-bold text-lg">Partidos del torneo: {id}</p>
+                        )}
+
+                        {/* Formulario para crear */}
+                        {visibilidad.registro && <FormRegistroPartido visible={handleVisible} idTorneo={id} />}
 
                         {/* Botones */}
-                        <div className="flex flex-wrap gap-2 mb-4">
-                            <div>
-                                <Boton icono="filtrar" mensaje="Filtrar" name="filtros" type="button" accion={handleVisible} />
+                        {partidos.length > 0 && (
+
+                            <div className="flex flex-wrap gap-2 mb-4">
+                                <div>
+                                    <Boton icono="filtrar" mensaje="Filtrar" name="filtros" type="button" accion={handleVisible} />
+                                </div>
+                                <div>
+                                    <Boton icono="registrar" mensaje="Registrar" name="registro" type="button" accion={handleVisible} />
+                                </div>
                             </div>
-                            <div>
-                                <Boton icono="registrar" mensaje="Registrar" name="registro" type="button" />
-                            </div>
-                        </div>
+                        )}
 
                         {/* Filtros */}
                         {visibilidad.filtros && (
                             <form onSubmit={handleSubmit}>
-                                <div className={`mb-4 grid grid-cols-1 gap-2 text-center sm:text-start sm:grid-cols-2 sm:gap-0 md:grid-cols-3 xl:grid-cols-5 bg-white p-3 rounded-md shadow-sm max-w-6xl}`}>
+                                <div className={`mb-4 grid grid-cols-1 gap-2 text-center sm:text-start sm:grid-cols-2 sm:gap-0 md:grid-cols-3 bg-white p-3 rounded-md shadow-sm max-w-6xl}`}>
                                     <div>
                                         <p className="text-sm text-gray-500">Equipo</p>
                                         <select name="equipo" value={filtros.equipo} className="border border-[#868686] rounded-sm" onChange={handleChangeFiltro}>
@@ -162,10 +173,15 @@ export function TorneoPartidos({ url }: Url) {
                                             })}
                                         </select>
                                     </div>
-                                    <div>
+                                    {/* <div>
                                         <p className="text-sm text-gray-500">Fecha</p>
-                                        <input type="date" name="" id="" className="ps-1 border border-[#868686] rounded-sm"/>
+                                        <input type="date" name="fecha" value={filtros.fecha} onChange={handleChangeFiltro} className="ps-1 border border-[#868686] rounded-sm" />
                                     </div>
+                                    <div className="mt-3 flex gap-2 items-end">
+                                        <button type="submit" className="w-12/12 cursor-pointer bg-[#1E2939] p-1 rounded-sm text-white hover:bg-[#374151]">
+                                            Buscar
+                                        </button>
+                                    </div> */}
                                 </div>
                             </form>
                         )}
@@ -209,7 +225,7 @@ export function TorneoPartidos({ url }: Url) {
                                         </div>
                                     )
                                 })
-                            ) : <p>No hay partidos registrados en éste torneo</p>}
+                            ) : <p>No hay partidos registrados en este torneo</p>}
                         </div>
                         {/* {data.totalPages > 1 && (
                             <div className="flex flex-wrap items-center">
