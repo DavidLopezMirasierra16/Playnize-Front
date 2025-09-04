@@ -3,6 +3,8 @@ import type { Url } from "../Deportes/Deportes";
 import { useFetch } from "../../Hooks_Personalizados/UseFetch";
 import { useAuth } from "../../Auth/AuthContext";
 import { useNavigate } from "react-router-dom";
+import { Boton } from "../../Componentes_Personalizados/BotonPrincipal";
+import { FormRegistroEquipos } from "./FormRegistroEquipos";
 
 export function Equipos({ url }: Url) {
 
@@ -22,10 +24,13 @@ export function Equipos({ url }: Url) {
         activo: string
     }
 
-    const { token, rol } = useAuth();
+    const { token, rol, mensaje, setMensaje } = useAuth();
     const { data, loading, error, fetchData } = useFetch();
     const [pagina, setPagina] = useState<number>(1);
-    const [visible, setVisible] = useState<boolean>(false);
+    const [visible, setVisible] = useState({
+        filtros: false,
+        agregar: false
+    });
     const navigate = useNavigate();
     const [buscar, setBuscar] = useState<Busqueda>({
         integrante: '',
@@ -51,10 +56,19 @@ export function Equipos({ url }: Url) {
         if (buscar.activo) params.append('activo', buscar.activo.toString());
 
         fetchData(url + `?${params}`, 'get', {}, token);
-    }, [url, buscar, pagina]);
+    }, [url, buscar, pagina, visible.agregar]);
 
-    const handleVisible = () => {
-        setVisible(!visible);
+    const handleVisible = (e?: React.MouseEvent<HTMLButtonElement>, key?: keyof typeof visible) => {
+        if (e) {
+            const name = e.currentTarget.name as keyof typeof visible;
+            setVisible(prev => ({
+                ...prev, [name]: !prev[name]
+            }))
+        } else if (key) {
+            setVisible(prev => ({
+                ...prev, [key]: !prev[key]
+            }))
+        }
     }
 
     const handleChangeFiltro = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -92,6 +106,12 @@ export function Equipos({ url }: Url) {
         navigate(`/panel/equipos/${id}`);
     }
 
+    useEffect(() => {
+        setInterval(() => {
+            setMensaje(null);
+        }, 10000)
+    }, [mensaje])
+
     return (
         <>
             {error ? (
@@ -107,24 +127,31 @@ export function Equipos({ url }: Url) {
                 </div>
             ) : null}
 
+            {mensaje && (
+                <div className="bg-gradient-to-l from-lime-500 via-green-500 to-emerald-500 rounded-md p-2 mb-4">
+                    <p className="text-white">{mensaje}</p>
+                </div>
+            )}
+
             {data && (
                 <div>
                     <div className="bg-white p-3 rounded-md shadow-sm mb-4">
                         <p className="mb-4 font-bold text-lg">{rol == 1 ? "Equipos" : "Tus equipos"}</p>
 
                         {/* Botón de mostrar filtros */}
-                        <div className={`mb-4`}>
-                            <button onClick={handleVisible} className="flex flex-wrap gap-1 items-center cursor-pointer bg-[#1E2939] p-1 rounded-sm text-white hover:bg-[#374151]">
+                        <div className={`mb-4 flex flex-wrap gap-2`}>
+                            <button onClick={handleVisible} name="filtros" className="flex flex-wrap gap-1 items-center cursor-pointer bg-[#1E2939] p-1 rounded-sm text-white hover:bg-[#374151]">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-5">
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-9.75 0h9.75" />
                                 </svg>
-                                {!visible ? 'Filtros' : 'Ocultar'}
+                                {!visible.filtros ? 'Filtros' : 'Ocultar'}
                             </button>
+                            <Boton icono="registrar" mensaje="Registrar" type="button" name="agregar" accion={handleVisible} />
                         </div>
 
                         {/* Filtros */}
                         <form onSubmit={handleSubmit}>
-                            <div className={`mb-4 grid grid-cols-1 gap-2 text-center sm:text-start sm:grid-cols-2 sm:gap-0 md:grid-cols-3 xl:grid-cols-5 bg-white p-3 rounded-md shadow-sm max-w-6xl ${visible ? 'block' : 'hidden'}`}>
+                            <div className={`mb-4 grid grid-cols-1 gap-2 text-center sm:text-start sm:grid-cols-2 sm:gap-0 md:grid-cols-3 xl:grid-cols-5 bg-white p-3 rounded-md shadow-sm max-w-6xl ${visible.filtros ? 'block' : 'hidden'}`}>
                                 <div>
                                     <p className="text-sm text-gray-500">Nombre</p>
                                     <input type="text" name="nombre" id="nombre" value={filtro.nombre} onChange={handleChangeFiltro} className="ps-1 border border-[#868686] rounded-sm" />
@@ -155,6 +182,8 @@ export function Equipos({ url }: Url) {
                                 </div>
                             </div>
                         </form>
+
+                        {visible.agregar && <FormRegistroEquipos visible={handleVisible} />}
 
                         {/* Tabla */}
                         <div>

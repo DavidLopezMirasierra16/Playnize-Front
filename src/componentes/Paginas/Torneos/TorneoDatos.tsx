@@ -9,6 +9,8 @@ import { FormRegistro } from "../../Componentes_Personalizados/FormRegistro";
 
 export function TorneoDatos({ url }: Url) {
 
+    type Pagina = "partidos" | "equipos";
+
     const { id } = useParams();
     const { token, rol, mensaje, setMensaje } = useAuth();
     const { data, loading, error, fetchData } = useFetch();
@@ -56,8 +58,8 @@ export function TorneoDatos({ url }: Url) {
         }));
     }
 
-    const handleRedirect = (id: number) => {
-        navegate(`/panel/torneo/partidos/${id}`)
+    const handleRedirect = (id: number, type: Pagina) => {
+        navegate(`/panel/torneo/${type}/${id}`)
     }
 
     useEffect(() => {
@@ -205,7 +207,7 @@ export function TorneoDatos({ url }: Url) {
                             <p className="mb-1 font-bold text-lg">Partidos</p>
                             <div className="flex flex-wrap gap-2 items-center">
                                 <p>Consulta todos los partidos de este torneo</p>
-                                <svg onClick={() => handleRedirect(data.torneo.id)} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-5 cursor-pointer">
+                                <svg onClick={() => handleRedirect(data.torneo.id, "partidos")} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-5 cursor-pointer">
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
                                 </svg>
                             </div>
@@ -215,47 +217,16 @@ export function TorneoDatos({ url }: Url) {
 
                     {/* Equipos */}
                     <div className="bg-white p-3 rounded-md shadow-sm mb-4">
-                        <p className="mb-4 font-bold text-lg">Equipos</p>
+                        <div className="flex flex-col">
+                            <p className="mb-1 font-bold text-lg">Equipos</p>
+                            <div className="flex flex-wrap gap-2 items-center">
+                                <p>Consulta todos los equipos de este torneo</p>
+                                <svg onClick={() => handleRedirect(data.torneo.id, "equipos")} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-5 cursor-pointer">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
+                                </svg>
+                            </div>
 
-                        {data.torneo.torneo_equipos.$values.length > 0 ? (
-                            data.torneo.torneo_equipos.$values.map((et: any, i: number) => {
-                                return (
-                                    <div key={i} className={`mt-6 ${i === et.participantes.$values.length - 1 ? '' : ' border-b-2 border-b-[#F3F4F6]'}`}>
-                                        <div className={`flex flex-wrap items-center mb-2`}>
-                                            <p className="text-lg">{et.nombre}</p>
-                                            <Info id={et.id} url={`/panel/equipos/`} />
-                                        </div>
-
-                                        {et.participantes.$values.length > 0 ? (
-                                            et.participantes.$values.map((p: any, i: number) => {
-                                                return (
-                                                    <div className={`mb-5 items-center grid grid-cols-1 lg:grid-cols-[1fr_3fr]`} key={i}>
-                                                        <div>
-                                                            <div className="flex flex-col gap-1">
-                                                                <p className="text-sm text-gray-500">Participante</p>
-                                                                <p className="text-base font-medium text-gray-800 break-words">{p.nombre} {p.apellidos}</p>
-                                                            </div>
-                                                        </div>
-                                                        <div className="mt-3 grid grid-cols-2 lg:grid-cols-[1fr_2fr] lg:mt-0">
-                                                            <div className="flex flex-col gap-1">
-                                                                <p className="text-sm text-gray-500">Email</p>
-                                                                <a href={`mailto:${p.email}`} className="text-base font-medium text-gray-800 break-words">{p.email}</a>
-                                                            </div>
-                                                            <div className="flex flex-col gap-1">
-                                                                <p className="text-sm text-gray-500">Teléfono</p>
-                                                                <p className="text-base font-medium text-gray-800 break-words">{p.telefono}</p>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                )
-                                            })
-                                        ) : <p className="font-bold mb-5">No tiene ningún participante</p>}
-
-                                    </div>
-                                )
-                            })
-                        ) : <p>No hay ningún equipo registrado</p>}
-
+                        </div>
                     </div>
 
                 </div>

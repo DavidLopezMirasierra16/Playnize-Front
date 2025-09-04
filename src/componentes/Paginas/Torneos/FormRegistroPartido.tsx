@@ -5,8 +5,9 @@ import { useEffect, useState } from "react";
 import { useFetch } from "../../Hooks_Personalizados/UseFetch";
 
 interface DatosPartido {
-    visible: (e: React.MouseEvent<HTMLButtonElement>) => void;
+    visible: (e?: React.MouseEvent<HTMLButtonElement>) => void;
     idTorneo: string | undefined;
+    colectivo: boolean;
 }
 
 interface Equipo {
@@ -16,19 +17,19 @@ interface Equipo {
 }
 
 interface InfoPartido {
-    Id_torneo: number,
+    Id_torneo: string | undefined,
     Id_equipo_local: number,
     Id_equipo_visitante: number,
     Fecha: string
 }
 
-export function FormRegistroPartido({ visible, idTorneo }: DatosPartido) {
+export function FormRegistroPartido({ visible, idTorneo, colectivo }: DatosPartido) {
 
-    const { token } = useAuth();
+    const { token, setMensaje } = useAuth();
     const { data, loading, error, fetchData } = useFetch();
     const [equipos, setEquipos] = useState([]);
     const [datos, setDatos] = useState<InfoPartido>({
-        Id_torneo: 0,
+        Id_torneo: idTorneo,
         Id_equipo_local: 0,
         Id_equipo_visitante: 0,
         Fecha: ''
@@ -66,12 +67,9 @@ export function FormRegistroPartido({ visible, idTorneo }: DatosPartido) {
             setErrorEquipos(true);
             return
         } else {
-
-            //Usar una url de la api en función de si es equipo o individual
-            //Crear una variable booleana que sea si equipo o individual y que lanze un fetch a para pillar los equipos en el select
-            //o los individuales para el select (no puede juar un equipo contra un individual)
-
             setErrorEquipos(false);
+            const url_fetch = colectivo ? "http://localhost:5170/api/PartidoEquipos" : "http://localhost:5170/api/PartidoNoEquipos";
+            fetchData(url_fetch, 'post', { body: datos }, token);
         }
     }
 
@@ -79,6 +77,13 @@ export function FormRegistroPartido({ visible, idTorneo }: DatosPartido) {
         e.preventDefault();
         handleFetch();
     }
+
+    useEffect(() => {
+        if (data){
+            setMensaje(data.message)
+            visible();
+        } 
+    }, [data]);
 
     return (
         <form onSubmit={handleSubmit} className="text-white">
@@ -95,7 +100,6 @@ export function FormRegistroPartido({ visible, idTorneo }: DatosPartido) {
                         </div>
                     ) : null}
 
-                    {/* <h2 className="text-lg font-semibold mb-4">{!datosEditar ? "Añadir rol" : "Editar rol"}</h2> */}
                     <h2 className="text-lg font-semibold mb-4">Añadir partido</h2>
                     <div className="grid grid-cols-1 gap-4">
                         <div className="flex flex-col gap-1">

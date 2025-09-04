@@ -92,7 +92,7 @@ export function EquiposDatos({ url }: Url) {
                                 )
 
                                 return (
-                                    <div key={i}>
+                                    <div key={i} className="mb-5">
                                         <div className="flex flex-wrap items-center mt-4">
                                             <p className="text-lg">{t.nombre}</p>
                                             <Info id={t.idTorneo} url={`/panel/torneos/`} />

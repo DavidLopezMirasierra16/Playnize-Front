@@ -27,7 +27,7 @@ export function TorneoPartidos({ url }: Url) {
     }
 
     const { id } = useParams();
-    const { token } = useAuth();
+    const { token, mensaje, setMensaje } = useAuth();
     const { data, loading, error, fetchData } = useFetch();
     const [partidos, setPartidos] = useState<any>([]);
     const [equiposSelect, setEquiposSelect] = useState([]);
@@ -36,6 +36,7 @@ export function TorneoPartidos({ url }: Url) {
         registro: false
     })
     const [pagina, setPagina] = useState<number>(1);
+    const [colectivo, setColectivo] = useState<boolean>(false);
 
     const [filtros, setFiltros] = useState({
         equipo: '',
@@ -66,7 +67,7 @@ export function TorneoPartidos({ url }: Url) {
         fetchData(url + `/${id}` + `?${params.toString()}`, "get", {}, token);
         fetchEquipos();
 
-    }, [filtros]);
+    }, [filtros, visibilidad.registro]);
 
     useEffect(() => {
         if (data) {
@@ -78,18 +79,29 @@ export function TorneoPartidos({ url }: Url) {
                         ? torneo.equipo_resultados.$values
                         : torneo.noequipo_resultados?.$values ?? [];
                 setPartidos(partidos);
+
+                const valores = data.datos.$values.map((p: any) => p.colectivo);
+                setColectivo(valores);
+
             }
+            console.log(data)
         }
     }, [data])
 
-    const handleVisible = (e: React.MouseEvent<HTMLButtonElement>) => {
-        const { name } = e.currentTarget;
+    const handleVisible = (e?: React.MouseEvent<HTMLButtonElement>) => {
+        if (e) {
+            const { name } = e.currentTarget;
 
-        //El nombre es una clave del tipo visibilidad
-        const key = name as keyof typeof visibilidad;
-        setVisible(prev => ({
-            ...prev, [key]: !prev[key]
-        }));
+            //El nombre es una clave del tipo visibilidad
+            const key = name as keyof typeof visibilidad;
+            setVisible(prev => ({
+                ...prev, [key]: !prev[key] //Distinto de lo que tuviese la clave
+            }));
+        } else {
+            // valor por defecto si no viene evento → ejemplo: cerrar "registro"
+            setVisible(prev => ({ ...prev, registro: !prev.registro }));
+        }
+
     }
 
     const handleChangeFiltro = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -110,6 +122,14 @@ export function TorneoPartidos({ url }: Url) {
 
 
     // }
+
+    useEffect(() => {
+        if (mensaje) {
+            setInterval(() => {
+                setMensaje(null);
+            }, 7000);
+        }
+    }, [mensaje]);
 
     return (
         <>
@@ -133,7 +153,7 @@ export function TorneoPartidos({ url }: Url) {
                             <div className="flex flex-wrap gap-1">
                                 <p className="mb-4 font-bold text-lg">Partidos del torneo:</p>
                                 {data.datos.$values.map((p: any, i: number) => (
-                                    <p key={i} className="mb-4 font-bold text-lg">{p.nombre}</p>
+                                    <p key={i} className="mb-4 font-bold text-lg">{p.nombre}{p.colectivo == "true" ? "true" : "false"}</p>
                                 ))}
 
                             </div>
@@ -143,20 +163,21 @@ export function TorneoPartidos({ url }: Url) {
                         )}
 
                         {/* Formulario para crear */}
-                        {visibilidad.registro && <FormRegistroPartido visible={handleVisible} idTorneo={id} />}
+                        {visibilidad.registro && <FormRegistroPartido visible={handleVisible} idTorneo={id} colectivo={colectivo} />}
 
                         {/* Botones */}
-                        {partidos.length > 0 && (
-
-                            <div className="flex flex-wrap gap-2 mb-4">
-                                <div>
-                                    <Boton icono="filtrar" mensaje="Filtrar" name="filtros" type="button" accion={handleVisible} />
-                                </div>
+                        <div className="flex flex-wrap gap-2 mb-4">
+                            <>
+                                {partidos.length > 0 && (
+                                    <div>
+                                        <Boton icono="filtrar" mensaje="Filtrar" name="filtros" type="button" accion={handleVisible} />
+                                    </div>
+                                )}
                                 <div>
                                     <Boton icono="registrar" mensaje="Registrar" name="registro" type="button" accion={handleVisible} />
                                 </div>
-                            </div>
-                        )}
+                            </>
+                        </div>
 
                         {/* Filtros */}
                         {visibilidad.filtros && (
@@ -182,6 +203,7 @@ export function TorneoPartidos({ url }: Url) {
                                             Buscar
                                         </button>
                                     </div> */}
+                                    {/* <Boton type="button" mensaje="Limpiar" colores="w-2/12 bg-red-200" /> */}
                                 </div>
                             </form>
                         )}
