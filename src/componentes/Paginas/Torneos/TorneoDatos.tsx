@@ -3,7 +3,6 @@ import { useFetch } from "../../Hooks_Personalizados/UseFetch";
 import type { Url } from "../Deportes/Deportes";
 import { useEffect, useState } from "react";
 import { useAuth } from "../../Auth/AuthContext";
-import { Info } from "../Perfil/Perfil";
 import { Boton } from "../../Componentes_Personalizados/BotonPrincipal";
 import { FormRegistro } from "../../Componentes_Personalizados/FormRegistro";
 

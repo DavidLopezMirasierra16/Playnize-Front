@@ -1,23 +1,57 @@
 import { useParams } from "react-router-dom"
 import { useFetch } from "../../Hooks_Personalizados/UseFetch";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import type { Url } from "../Deportes/Deportes";
 import { useAuth } from "../../Auth/AuthContext";
 import { Info } from "../Perfil/Perfil";
+import axios from "axios";
+import { Boton } from "../../Componentes_Personalizados/BotonPrincipal";
+import { FormRegistroEquipo } from "./FormRegistroEquipo";
 
 export function TorneoEquipos({ url }: Url) {
 
+    type Pagina = "siguiente" | "atras";
+
     const { id } = useParams();
-    const { token } = useAuth();
+    const { token, mensaje, setMensaje } = useAuth();
     const { data, loading, error, fetchData } = useFetch();
+    const [datos, setDatos] = useState<any>([]);
+    const [pagina, setPagina] = useState<number>(1);
+    const [visibilidad, setVisibilidad] = useState<boolean>(false);
 
     useEffect(() => {
-        fetchData(url + `/${id}`, 'get', {}, token)
-    }, []);
+
+        const nombreTorneo = async () => {
+            const torneo = await axios.get(`http://localhost:5170/api/Torneo/Datos/${id}`, {
+                headers: {
+                    Authorization: token ? `Bearer ${token}` : ''
+                }
+            });
+            setDatos(torneo.data.torneo);
+        }
+
+        const params = new URLSearchParams();
+        params.append('page', pagina.toString());
+
+        nombreTorneo();
+        fetchData(url + `/${id}?${params.toString()}`, 'get', {}, token)
+    }, [pagina, visibilidad]);
+
+    const handlePagina = (accion: Pagina) => {
+        setPagina(prev => accion == "siguiente" ? prev + 1 : prev - 1);
+    }
+
+    const handleVisibilidad = () => {
+        setVisibilidad(!visibilidad);
+    }
 
     useEffect(() => {
-        if (data) console.log(data)
-    }, [data])
+        if (mensaje) {
+            setInterval(() => {
+                setMensaje(null);
+            }, 7000);
+        }
+    }, [mensaje]);
 
     return (
         <>
@@ -34,17 +68,29 @@ export function TorneoEquipos({ url }: Url) {
                 </div>
             ) : null}
 
+            {mensaje && (
+                <div className="bg-gradient-to-l from-lime-500 via-green-500 to-emerald-500 rounded-md p-2 mb-4">
+                    <p className="text-white">{mensaje}</p>
+                </div>
+            )}
+
             {data && (
                 <div>
                     <div className="bg-white p-3 rounded-md shadow-sm mb-4">
-                        {/* <p className="mb-4 font-bold text-lg">Equipos del torneo: {data.equipos.nombreTorneo}</p> */}
+                        <p className="mb-4 font-bold text-lg">Equipos del torneo: {datos.nombre}</p>
+
+                        <div>
+                            <Boton type="button" icono="registrar" mensaje="Registrar" accion={handleVisibilidad} />
+                        </div>
+
+                        {visibilidad && (<FormRegistroEquipo visible={handleVisibilidad} idTorneo={id} />)}
 
                         {/* Tabla */}
                         <div>
                             {data.datos.$values.length > 0 ? (
                                 data.datos.$values.map((et: any, i: number) => {
                                     return (
-                                        <div key={i} className={`mt-6 ${i === et.participantes.$values.length - 1 ? '' : ' border-b-2 border-b-[#F3F4F6]'}`}>
+                                        <div key={i} className={`mt-4 ${i === et.participantes.$values.length - 1 ? '' : ' border-b-2 border-b-[#F3F4F6]'}`}>
                                             <div className={`flex flex-wrap items-center mb-2`}>
                                                 <p className="text-lg">{et.nombre}</p>
                                                 <Info id={et.id} url={`/panel/equipos/`} />
@@ -78,15 +124,15 @@ export function TorneoEquipos({ url }: Url) {
                                         </div>
                                     )
                                 })
-                            ) : <p>No hay ningún equipo en este torneo</p>}
+                            ) : <p className="mt-2">No hay ningún equipo en este torneo</p>}
 
-                            {/* {data.totalPages > 1 && (
-                                <div className="flex flex-wrap items-center">
-                                    <button name="siguiente" onClick={handleNextPagina} className={`cursor-pointer bg-[#1E2939] p-1 rounded-sm text-white me-2 hover:bg-[#374151] ${data.currentPage === data.totalPages ? 'hidden' : ''}`}>Siguiente</button>
-                                    <button name="atras" onClick={handleNextPagina} className={`cursor-pointer bg-[#1E2939] p-1 rounded-sm text-white me-2 hover:bg-[#374151] ${data.currentPage === 1 ? 'hidden' : ''}`}>Atrás</button>
-                                    <p>{data.currentItems} deportes de {data.totalItems}</p>
+                            {data.totalPages > 1 && (
+                                <div className="flex flex-wrap items-center mt-5">
+                                    <button onClick={() => handlePagina("siguiente")} className={`cursor-pointer bg-[#1E2939] p-1 rounded-sm text-white me-2 hover:bg-[#374151] ${data.currentPage === data.totalPages ? 'hidden' : ''}`}>Siguiente</button>
+                                    <button onClick={() => handlePagina("atras")} className={`cursor-pointer bg-[#1E2939] p-1 rounded-sm text-white me-2 hover:bg-[#374151] ${data.currentPage === 1 ? 'hidden' : ''}`}>Atrás</button>
+                                    <p>{data.currentItems} equipos de {data.totalItems}</p>
                                 </div>
-                            )} */}
+                            )}
 
                         </div>
 
