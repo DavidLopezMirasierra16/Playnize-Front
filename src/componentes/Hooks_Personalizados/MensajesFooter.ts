@@ -28,6 +28,9 @@ export const MensajeFooter = {
                 <li><strong>Conservación de datos:</strong><br>
                     Tus datos se conservarán mientras tengas una cuenta activa o sea necesario para cumplir con obligaciones legales.
                 </li>
+                <li><strong>Información adicional:</strong><br>
+                    El presente sitio web, junto con todos sus recursos, inició su desarrollo e implementación el 26 de junio de 2025.
+                </li>
             </ol>
         </div>
     `,
@@ -87,7 +90,7 @@ export const MensajeFooter = {
             <p class="text-xl mb-2">Declaración de Uso Libre de Imágenes y Logo</p>
             <p class="mb-1">
                 Las imágenes fueron generadas mediante la inteligencia artificial GPT-5 de OpenAI, la herramienta Pixlr Image Generator
-                y el logotipo fue creado en la plataforma Canva utilizando únicamente elementos propios o de uso libre proporcionados por la herramienta.
+                y Canva utilizando únicamente elementos propios o de uso libre proporcionados por la herramienta.
                 Dichos contenidos:
             </p>
             <ol class="list-decimal pl-5 mb-1 p-1 space-y-2">

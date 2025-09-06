@@ -7,19 +7,26 @@ import { Boton } from "../../Componentes_Personalizados/BotonPrincipal";
 import axios from "axios";
 import { FormRegistroPartido } from "./FormRegistroPartido";
 
+export interface TorneoData {
+    $id: string,
+    id: number,
+    colectivo: boolean,
+    nombre: string
+}
+
 export function TorneoPartidos({ url }: Url) {
 
-    interface Partido {
-        id: number,
-        fecha: string,
-        idLocal: number,
-        nombreLocal: string,
-        idVisitante: number,
-        nombreVisitante: string,
-        resultado: {
-            $values: Resultado[];
-        };
-    }
+    // interface Partido {
+    //     id: number,
+    //     fecha: string,
+    //     idLocal: number,
+    //     nombreLocal: string,
+    //     idVisitante: number,
+    //     nombreVisitante: string,
+    //     resultado: {
+    //         $values: Resultado[];
+    //     };
+    // }
 
     interface Resultado {
         resultado: string,
@@ -36,7 +43,7 @@ export function TorneoPartidos({ url }: Url) {
         registro: false
     })
     const [pagina, setPagina] = useState<number>(1);
-    const [colectivo, setColectivo] = useState<boolean>(false);
+    const [colectivo, setColectivo] = useState<TorneoData | null>(null);
 
     const [filtros, setFiltros] = useState({
         equipo: '',
@@ -44,6 +51,16 @@ export function TorneoPartidos({ url }: Url) {
     });
 
     useEffect(() => {
+
+        const torneo = async () => {
+            const torneo = await axios.get(`http://localhost:5170/api/Torneo/Datos/${id}`, {
+                headers: {
+                    Authorization: token ? `Bearer ${token}` : ''
+                }
+            });
+            setColectivo(torneo.data.torneo);
+        }
+
         const params = new URLSearchParams();
         params.append('page', pagina.toString());
 
@@ -64,27 +81,17 @@ export function TorneoPartidos({ url }: Url) {
             }
         }
 
+        torneo();
         fetchData(url + `/${id}` + `?${params.toString()}`, "get", {}, token);
         fetchEquipos();
 
     }, [filtros, visibilidad.registro]);
 
+    //Lanzar una peticion a 
+
     useEffect(() => {
         if (data) {
-            //Ambos comparten estructura, si hay uno no hay otro
-            const torneo = data.datos?.$values?.[0];
-            if (torneo != null) {
-                const partidos =
-                    torneo.equipo_resultados?.$values?.length > 0
-                        ? torneo.equipo_resultados.$values
-                        : torneo.noequipo_resultados?.$values ?? [];
-                setPartidos(partidos);
-
-                const valores = data.datos.$values.map((p: any) => p.colectivo);
-                setColectivo(valores);
-
-            }
-            console.log(data)
+            setPartidos(data.datos.$values);
         }
     }, [data])
 
@@ -114,7 +121,6 @@ export function TorneoPartidos({ url }: Url) {
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        console.log(filtros.fecha)
     }
 
     // const handleNextPagina = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -146,21 +152,12 @@ export function TorneoPartidos({ url }: Url) {
                 </div>
             ) : null}
 
-            {data && partidos && (
+            {data && (
                 <div>
                     <div className="bg-white p-3 rounded-md shadow-sm mb-4">
-                        {data.datos.$values.length > 0 ? (
-                            <div className="flex flex-wrap gap-1">
-                                <p className="mb-4 font-bold text-lg">Partidos del torneo:</p>
-                                {data.datos.$values.map((p: any, i: number) => (
-                                    <p key={i} className="mb-4 font-bold text-lg">{p.nombre}{p.colectivo == "true" ? "true" : "false"}</p>
-                                ))}
-
-                            </div>
-
-                        ) : (
-                            <p className="mb-4 font-bold text-lg">Partidos del torneo: {id}</p>
-                        )}
+                        <div className="flex flex-wrap gap-1">
+                            <p className="mb-4 font-bold text-lg">Partidos del torneo: {colectivo?.nombre}</p>
+                        </div>
 
                         {/* Formulario para crear */}
                         {visibilidad.registro && <FormRegistroPartido visible={handleVisible} idTorneo={id} colectivo={colectivo} />}
@@ -211,34 +208,30 @@ export function TorneoPartidos({ url }: Url) {
                         {/* Tabla */}
                         <div>
                             {partidos.length > 0 ? (
-                                partidos.map((p: Partido, i: number) => {
+                                partidos.map((p: any, i: number) => {
                                     return (
                                         <div key={i} className={`mb-5 items-center grid grid-cols-2 md:grid-cols-4 ${i === partidos.length - 1 ? '' : ' border-b-2 border-b-[#F3F4F6]'} `}>
                                             <div>
                                                 <p className="text-sm text-gray-500">Equipo local</p>
-                                                <p className="text-base font-medium text-gray-800 break-words">{p.nombreLocal}</p>
+                                                <p className="text-base font-medium text-gray-800 break-words">{p.partido.nombreLocal}</p>
                                             </div>
                                             <div>
                                                 <p className="text-sm text-gray-500">Equipo visitante</p>
-                                                <p className="text-base font-medium text-gray-800 break-words">{p.nombreVisitante}</p>
+                                                <p className="text-base font-medium text-gray-800 break-words">{p.partido.nombreVisitante}</p>
                                             </div>
                                             <div className="mt-2 md:mt-0">
                                                 <p className="text-sm text-gray-500">Fecha</p>
-                                                <p className="text-base font-medium text-gray-800 break-words">{p.fecha}</p>
+                                                <p className="text-base font-medium text-gray-800 break-words">{p.partido.fecha}</p>
                                             </div>
                                             <div className="mt-2 md:mt-0">
                                                 <p className="text-sm text-gray-500">Resultado</p>
-                                                {p.resultado.$values.length > 0 ? (
-                                                    p.resultado.$values.map((r: Resultado, k: number) => {
+                                                {p.partido.resultado.$values.length > 0 ? (
+                                                    p.partido.resultado.$values.map((r: Resultado, k: number) => {
                                                         return (
                                                             <div key={k}>
                                                                 <div>
                                                                     <p className="text-base font-medium text-gray-800 break-words">{r.resultado}</p>
                                                                 </div>
-                                                                {/* <div>
-                                                                    <p className="text-sm text-gray-500">Ganador</p>
-                                                                    <p>{r.ganador}</p>
-                                                                </div> */}
                                                             </div>
                                                         )
                                                     })

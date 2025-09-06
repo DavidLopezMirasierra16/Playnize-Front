@@ -3,11 +3,12 @@ import { Boton } from "../../Componentes_Personalizados/BotonPrincipal";
 import { useAuth } from "../../Auth/AuthContext";
 import { useEffect, useState } from "react";
 import { useFetch } from "../../Hooks_Personalizados/UseFetch";
+import type { TorneoData } from "./TorneoPartidos";
 
 interface DatosPartido {
     visible: (e?: React.MouseEvent<HTMLButtonElement>) => void;
     idTorneo: string | undefined;
-    colectivo: boolean;
+    colectivo: TorneoData | null;
 }
 
 interface Equipo {
@@ -68,7 +69,7 @@ export function FormRegistroPartido({ visible, idTorneo, colectivo }: DatosParti
             return
         } else {
             setErrorEquipos(false);
-            const url_fetch = colectivo ? "http://localhost:5170/api/PartidoEquipos" : "http://localhost:5170/api/PartidoNoEquipos";
+            const url_fetch = colectivo?.colectivo ? "http://localhost:5170/api/PartidoEquipos" : "http://localhost:5170/api/PartidoNoEquipos";
             fetchData(url_fetch, 'post', { body: datos }, token);
         }
     }
