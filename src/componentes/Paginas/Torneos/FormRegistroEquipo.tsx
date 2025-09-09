@@ -26,7 +26,7 @@ export function FormRegistroEquipo({ visible, idTorneo }: DatosEquipo) {
 
     useEffect(() => {
         const fetchEquipos = async () => {
-            const eqp = await axios.get(`http://localhost:5170/api/Equipos/All`, {
+            const eqp = await axios.get(`http://localhost:5170/api/Equipos/NoTorneo/${idTorneo}`, {
                 headers: {
                     Authorization: token ? `Bearer ${token}` : ''
                 }

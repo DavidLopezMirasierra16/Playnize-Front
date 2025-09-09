@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { useAuth } from "../../Auth/AuthContext";
 import { Boton } from "../../Componentes_Personalizados/BotonPrincipal";
 import { FormRegistro } from "../../Componentes_Personalizados/FormRegistro";
+import axios from "axios";
 
 export function TorneoDatos({ url }: Url) {
 
@@ -19,10 +20,14 @@ export function TorneoDatos({ url }: Url) {
         patrocinadores: false,
         partido: false
     });
+    const [success, setSuccess] = useState<boolean>(false);
 
     useEffect(() => {
         fetchData(url + `${id}`, "get", {}, token);
-    }, [visible]);
+
+        //Limpio success
+        success == true ? setSuccess(false) : '';
+    }, [visible, success]);
 
     const FormatoPremio = (precio: string) => {
         //Intentamos convertir el valor a un número.
@@ -59,6 +64,15 @@ export function TorneoDatos({ url }: Url) {
 
     const handleRedirect = (id: number, type: Pagina) => {
         navegate(`/panel/torneo/${type}/${id}`)
+    }
+
+    const handleRemove = async (type: "Patrocinadores" | "Requisitos", id: number) => {
+        const fetch = await axios.delete(`http://localhost:5170/api/${type}/${id}`, {
+            headers: {
+                Authorization: token ? `Bearer ${token}` : ''
+            }
+        });
+        setSuccess(fetch.data.isSuccess)
     }
 
     useEffect(() => {
@@ -161,10 +175,13 @@ export function TorneoDatos({ url }: Url) {
                         {data.torneo.requisitos.$values.length > 0 ? (
                             data.torneo.requisitos.$values.map((r: any, i: number) => {
                                 return (
-                                    <div key={r.id} className="mt-3">
+                                    <div key={r.id} className="mt-3 flex flex-wrap gap-1 items-center">
                                         <p className=" break-all max-w-full md:max-w-[100%] overflow-hidden">
                                             {i + 1}.- {r.descripcion}
                                         </p>
+                                        <svg xmlns="http://www.w3.org/2000/svg" onClick={() => handleRemove("Requisitos", r.id)} fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-4 cursor-pointer">
+                                            <path strokeLinecap="round" strokeLinejoin="round" d="M15 12H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                                        </svg>
                                     </div>
                                 )
                             })
@@ -189,10 +206,13 @@ export function TorneoDatos({ url }: Url) {
                         {data.torneo.patrocinadores.$values.length > 0 ? (
                             data.torneo.patrocinadores.$values.map((p: any, i: number) => {
                                 return (
-                                    <div key={i} className="mt-3">
+                                    <div key={i} className="mt-3 flex flex-wrap gap-1 items-center">
                                         <p className=" break-all max-w-full md:max-w-[100%] overflow-hidden">
                                             {i + 1}.- {p.patrocinador}
                                         </p>
+                                        <svg xmlns="http://www.w3.org/2000/svg" onClick={() => handleRemove("Patrocinadores", p.id)} fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-4 cursor-pointer">
+                                            <path strokeLinecap="round" strokeLinejoin="round" d="M15 12H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                                        </svg>
                                     </div>
                                 )
                             })

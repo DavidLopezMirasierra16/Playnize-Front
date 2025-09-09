@@ -23,7 +23,7 @@ export function RegistrarDeporte({ visible, id, datosEditar }: DatosDeporte) {
     const { data, loading, error, fetchData } = useFetch();
     const [deporte, setDeporte] = useState<DeporteData>({
         deporte: datosEditar?.deporte || '',
-        Colectivo: datosEditar?.colectivo === 'True' ? '1' : datosEditar?.colectivo === 'False' ? '2' : '1',
+        Colectivo: datosEditar ? (datosEditar.colectivo.toString().toLowerCase() === "true" ? "1" : "2") : "1",
         MinimoEquipo: datosEditar?.minimoPorEquipo?.toString() || '',
         MaximoEquipo: datosEditar?.maximoPorEquipo?.toString() || ''
     });

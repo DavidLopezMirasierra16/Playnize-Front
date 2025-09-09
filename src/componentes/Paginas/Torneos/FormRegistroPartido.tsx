@@ -9,6 +9,7 @@ interface DatosPartido {
     visible: (e?: React.MouseEvent<HTMLButtonElement>) => void;
     idTorneo: string | undefined;
     colectivo: TorneoData | null;
+    DatosEditar?: InfoPartido
 }
 
 interface Equipo {
@@ -17,23 +18,25 @@ interface Equipo {
     nombre: string
 }
 
-interface InfoPartido {
+export interface InfoPartido {
     Id_torneo: string | undefined,
     Id_equipo_local: number,
     Id_equipo_visitante: number,
-    Fecha: string
+    Fecha: string,
+    Resultado?: string
 }
 
-export function FormRegistroPartido({ visible, idTorneo, colectivo }: DatosPartido) {
+export function FormRegistroPartido({ visible, idTorneo, colectivo, DatosEditar }: DatosPartido) {
 
     const { token, setMensaje } = useAuth();
     const { data, loading, error, fetchData } = useFetch();
     const [equipos, setEquipos] = useState([]);
     const [datos, setDatos] = useState<InfoPartido>({
         Id_torneo: idTorneo,
-        Id_equipo_local: 0,
-        Id_equipo_visitante: 0,
-        Fecha: ''
+        Id_equipo_local: DatosEditar ? DatosEditar.Id_equipo_local : 0,
+        Id_equipo_visitante: DatosEditar ? DatosEditar.Id_equipo_visitante : 0,
+        Fecha: DatosEditar ? DatosEditar.Fecha : '',
+        Resultado: DatosEditar ? DatosEditar.Resultado : undefined //El undefined no manda el campo resultado en la petición
     });
     const [errorEquipos, setErrorEquipos] = useState<boolean>(false);
 
@@ -80,10 +83,10 @@ export function FormRegistroPartido({ visible, idTorneo, colectivo }: DatosParti
     }
 
     useEffect(() => {
-        if (data){
+        if (data) {
             setMensaje(data.message)
             visible();
-        } 
+        }
     }, [data]);
 
     return (
@@ -131,11 +134,17 @@ export function FormRegistroPartido({ visible, idTorneo, colectivo }: DatosParti
                         </div>
                         <div>
                             <p className="text-sm text-white">Fecha</p>
-                            <input required type="date" name="Fecha" value={datos.Fecha} onChange={handleChange} className="ps-1 rounded-sm bg-white text-black" />
+                            <input required type="date" min={new Date().toISOString().split("T")[0]} name="Fecha" value={datos.Fecha} onChange={handleChange} className="ps-1 rounded-sm bg-white text-black" />
                         </div>
+                        {DatosEditar && (
+                            <div>
+                                <p className="text-sm text-white">Resultado</p>
+                                <input type="text" className="ps-1 rounded-sm bg-white text-black w-full" placeholder="Introduzca el resultado en formato 1-2" />
+                            </div>
+                        )}
                     </div>
                     <div className="flex justify-end mt-4 space-x-2">
-                        <Boton type="button" mensaje="Cerrar" name="registro" accion={visible} colores="bg-red-700 hover:bg-red-600" />
+                        <Boton type="button" mensaje="Cerrar" name={!DatosEditar ? "registro" : "editar"} accion={visible} colores="bg-red-700 hover:bg-red-600" />
                         <Boton type="submit" mensaje="Guardar" colores="bg-emerald-600 hover:bg-emerald-700" />
                     </div>
                 </div>

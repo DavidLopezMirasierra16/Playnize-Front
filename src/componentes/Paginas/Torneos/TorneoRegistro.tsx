@@ -81,16 +81,17 @@ export function TorneoRegistro({ url }: Url) {
     }
 
     const handleAddRequisito = (campo: 'requisitos' | 'patrocinadores') => {
-        const valor = campo.trim();
+        const valorCampo = campo === 'requisitos' ? requisitoInput : patrocinadorInput;
 
-        if (valor.length === 0) {
+        if (valorCampo.length === 0) {
             setErrores(prev => ({
                 ...prev,
-                [valor]: true
+                [campo]: true
             }));
             return;
         }
 
+        //Si no tiene errores
         setErrores(prev => ({
             ...prev,
             [campo]: false

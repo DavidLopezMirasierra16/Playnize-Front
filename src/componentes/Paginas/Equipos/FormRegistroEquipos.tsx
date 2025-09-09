@@ -3,26 +3,30 @@ import { Boton } from "../../Componentes_Personalizados/BotonPrincipal";
 import { useFetch } from "../../Hooks_Personalizados/UseFetch";
 import { useAuth } from "../../Auth/AuthContext";
 import axios from "axios";
+import { useLocation } from "react-router-dom";
 
 interface Datos {
     visible: (e?: React.MouseEvent<HTMLButtonElement>, key?: 'agregar' | 'filtros') => void,
+    datosEditar?: Equipo,
+    idEquipo?: string
 }
 
-export function FormRegistroEquipos({ visible }: Datos) {
+export interface Equipo {
+    Nombre: string,
+    Id_integrante: string,
+    Activo: boolean
+}
 
-    interface Equipo {
-        Nombre: string,
-        Id_integrante: string,
-        Activo: boolean
-    }
+export function FormRegistroEquipos({ visible, datosEditar, idEquipo }: Datos) {
 
+    const location = useLocation();
     const { token, rol, setMensaje } = useAuth();
     const { data, loading, error, fetchData } = useFetch();
     const [organizadores, setOrganizadores] = useState<any>([]);
     const [datos, setDatos] = useState<Equipo>({
-        Nombre: '',
-        Id_integrante: '',
-        Activo: true
+        Nombre: datosEditar ? datosEditar.Nombre : '',
+        Id_integrante: datosEditar ? `${datosEditar.Id_integrante}` : '',
+        Activo: datosEditar ? datosEditar.Activo : true
     });
 
     useEffect(() => {
@@ -40,18 +44,15 @@ export function FormRegistroEquipos({ visible }: Datos) {
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value, type, checked } = e.target;
-
-        // if(name === "Id_integrante"){
-        //     const id_integrante = organizadores.find((u: any) => u.nombre + ' ' + u.apellidos === value);
-        // }
-
         setDatos(prev => ({
             ...prev, [name]: type === "checkbox" ? checked : value
-        }))
+        }));
     }
 
     const handleFetch = () => {
-        fetchData(`http://localhost:5170/api/Equipos`, 'post', { body: datos }, token);
+        const url = datosEditar ? `http://localhost:5170/api/Equipos/${idEquipo}` : `http://localhost:5170/api/Equipos`;
+        const method = datosEditar ? 'put' : 'post';
+        fetchData(url, method, { body: datos }, token);
     }
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -62,7 +63,7 @@ export function FormRegistroEquipos({ visible }: Datos) {
     useEffect(() => {
         if (data) {
             setMensaje(data.message);
-            visible(undefined, 'agregar');
+            datosEditar ? visible(undefined, 'agregar') : visible();
         }
     }, [data])
 
@@ -81,13 +82,13 @@ export function FormRegistroEquipos({ visible }: Datos) {
                         </div>
                     ) : null}
 
-                    <h2 className="text-lg font-semibold mb-4">Crear equipo</h2>
+                    <h2 className="text-lg font-semibold mb-4">{location.pathname == "/panel/equipos" ? "Crear equipo" : "Editar equipo"}</h2>
                     <div className="flex flex-col gap-4">
                         <div className="flex flex-col gap-1">
                             <p className="text-sm text-white">Nombre</p>
                             <input type="text" name="Nombre" required value={datos.Nombre} onChange={handleChange} className="border rounded p-1 bg-white text-black" placeholder="Rol" />
                         </div>
-                        {rol == 1 && (
+                        {rol == 1 && !datosEditar && (
                             <div className="flex flex-col gap-1">
                                 <p className="text-sm text-white">Asignar a</p>
                                 <input list="organizadores" name="Id_integrante" value={datos.Id_integrante} onChange={handleChange} placeholder="Selecciona un organizador (no obligatorio)" className="bg-white text-black rounded p-1" />
