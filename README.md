@@ -30,6 +30,8 @@
 *[Imágenes](https://www.linkedin.com/posts/david-l%C3%B3pez-mirasierra-680b4a343_avanzando-con-playnize-estoy-desarrollando-activity-7362610929299038208-oUB4?utm_source=share&utm_medium=member_desktop&rcm=ACoAAFYh_0ABY2GDyBJP9Xne9_e9Te4TB0f5Br0)*
 
 ## Cómo ejecutar localmente
+- Actualmente la aplicación requiere que la API esté en funcionamiento. Próximamente la subiré para facilitar su uso.
+<!--
 1. Clonar el repositorio
 2. Instalar dependencias del backend usando Visual Studio o .NET CLI
 3. Instalar dependencias del frontend: `npm install`
@@ -37,3 +39,4 @@
 5. Ejecutar backend: `dotnet run` o desde Visual Studio
 6. Ejecutar frontend: `npm run dev`
 7. Abrir el navegador en `http://localhost:3000`
+-->
