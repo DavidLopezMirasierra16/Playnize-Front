@@ -117,7 +117,7 @@ export function TorneoPartidos({ url }: Url) {
     }
 
     //Para mostrar el boton de agregar o no, si es su torneo o simplemente lo estoy viendo como usuario
-    //pensarlo con el rol o comprobando si es suyo
+    //pensarlo con el rol o comprobando si es mio
 
     useEffect(() => {
         if (mensaje) {
